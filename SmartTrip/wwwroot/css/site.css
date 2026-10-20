@@ -29,3 +29,325 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* ABOUT US PAGE */
+
+.about-page {
+    color: #263746;
+    background: #ebeced;
+    font-family: Arial, sans-serif;
+}
+
+.about-hero {
+    min-height: 420px;
+    background-image: linear-gradient(90deg, rgba(12, 42, 55, 0.88), rgba(12, 42, 55, 0.2)), url('/images/travel.jpeg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    border-radius: 0 0 24px 24px;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    width: 100%;
+    padding: 65px 8%;
+}
+
+.hero-content {
+    max-width: 620px;
+    color: white;
+}
+
+.hero-label,
+.section-label {
+    display: inline-block;
+    color: #20b8a5;
+    font-size: 17px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+}
+
+.hero-content h1 {
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.15;
+    margin-bottom: 20px;
+    font-weight: 800;
+}
+
+.hero-content p {
+    max-width: 520px;
+    font-size: 17px;
+    line-height: 1.8;
+    margin-bottom: 28px;
+}
+
+.about-button {
+    display: inline-block;
+    background: #20b8a5;
+    color: white;
+    padding: 14px 25px;
+    border-radius: 9px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+    .about-button:hover {
+        background: #169888;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+/* MISSION */
+
+.mission-section {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 50px;
+    align-items: center;
+    padding: 80px 8%;
+}
+
+.mission-text h2,
+.section-heading h2 {
+    color: #123b4a;
+    font-size: clamp(27px, 3vw, 36px);
+    line-height: 1.3;
+    margin-bottom: 22px;
+}
+
+.mission-text p {
+    color: #718096;
+    line-height: 1.9;
+    font-size: 16px;
+}
+
+.mission-card {
+    border-radius: 20px;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 10px 35px rgba(18, 59, 74, 0.08);
+    border: 1px solid #e8eff2;
+}
+
+.mission-pic {
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .mission-pic img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        background: transparent;
+    }
+
+.mission-icon {
+    font-size: 55px;
+    margin-bottom: 18px;
+}
+
+.mission-card h3 {
+    color: #123b4a;
+    margin-bottom: 15px;
+}
+
+.mission-card p {
+    color: #718096;
+    line-height: 1.8;
+}
+
+/* HOW IT WORKS */
+
+.how-it-works {
+    background: white;
+    padding: 75px 8%;
+}
+
+.section-heading {
+    text-align: center;
+    max-width: 750px;
+    margin: 0 auto 45px;
+}
+
+    .section-heading p {
+        color: #718096;
+        line-height: 1.7;
+    }
+
+.steps-container {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 35px minmax(0, 1fr) 35px minmax(0, 1fr) 35px minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+}
+
+.step-arrow {
+    color: #20b8a5;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    display: block;
+}
+
+.step-card {
+    position: relative;
+    background: #ebeced;
+    border-radius: 16px;
+    padding: 28px 22px;
+    border: 1px solid #e8eff2;
+    transition: 0.3s;
+}
+
+    .step-card:hover,
+    .benefit-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(18, 59, 74, 0.1);
+    }
+
+
+.step-arrow {
+    color: #20b8a5;
+    font-size: 30px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.step-icon {
+    font-size: 35px;
+    margin-bottom: 18px;
+}
+
+.step-number {
+    display: block;
+    color: #20b8a5;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.step-card h3 {
+    color: #123b4a;
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.step-card p {
+    color: #718096;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* BENEFITS */
+
+.benefits-section {
+    padding: 80px 8%;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.benefit-card {
+    background: white;
+    padding: 28px 22px;
+    border-radius: 16px;
+    border: 1px solid #e8eff2;
+    transition: 0.3s;
+}
+
+.benefit-icon {
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e1f8f4;
+    border-radius: 14px;
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+.benefit-card h3 {
+    color: #123b4a;
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.benefit-card p {
+    color: #718096;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* FINAL SECTION */
+
+.about-cta {
+    background: #123b4a;
+    color: white;
+    text-align: center;
+    padding: 65px 8%;
+    border-radius: 22px;
+    margin: 0 5% 50px;
+}
+
+    .about-cta h2 {
+        font-size: clamp(25px, 3vw, 34px);
+        margin-bottom: 18px;
+    }
+
+    .about-cta p {
+        color: #d4e3e8;
+        line-height: 1.8;
+        margin-bottom: 25px;
+    }
+
+.cta-button {
+    background: #20b8a5;
+}
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 900px) {
+    .mission-section {
+        grid-template-columns: 1fr;
+        padding: 55px 6%;
+    }
+
+    .steps-container,
+    .benefits-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 550px) {
+    .hero-overlay {
+        padding: 50px 7%;
+    }
+
+    .hero-content h1 {
+        font-size: 35px;
+    }
+
+    .steps-container,
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .how-it-works,
+    .benefits-section {
+        padding: 55px 6%;
+    }
+
+    .about-cta {
+        margin: 0 4% 30px;
+        padding: 45px 6%;
+    }
+
+}
