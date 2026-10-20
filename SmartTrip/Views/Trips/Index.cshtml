@@ -1,0 +1,35 @@
+﻿@model IEnumerable<SmartTrip.Models.Trip>
+
+<div class="container mt-4">
+    <h2>Моите пътувания 🌍</h2>
+    <hr />
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Град</th>
+                    <th>Бюджет</th>
+                    <th>Информация за времето</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var trip in Model)
+                {
+                    <tr>
+                        <td>@trip.City</td>
+                        <td>@trip.Budget лв.</td>
+                        <td>@trip.WeatherInfo</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            Все още няма добавени пътувания в базата данни!
+        </div>
+    }
+</div>
