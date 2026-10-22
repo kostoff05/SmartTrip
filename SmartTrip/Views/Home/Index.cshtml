@@ -2,7 +2,285 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="home-page">
+
+    <!-- HERO SECTION -->
+    <section class="home-hero">
+        <div class="home-hero-overlay">
+            <div class="home-hero-content">
+
+                <span class="home-badge">✈ SMART TRIP EXPERIENCE</span>
+
+                <h1>
+                    Пътувай умно.<br />
+                    <span>Откривай повече.</span>
+                </h1>
+
+                <p>
+                    Открий нови места и създай своето следващо приключение.
+                    Ние ще ти помогнем да планираш пътуването според
+                    твоите желания, бюджет и интереси.
+                </p>
+
+                <a href="#plan-trip" class="home-primary-button">
+                    ✨ Планирай пътуване
+                    <span>→</span>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- TRIP PLANNER SECTION -->
+    <section class="trip-planner-section" id="plan-trip">
+
+        <div class="home-section-heading">
+            <span class="home-section-label">YOUR NEXT ADVENTURE</span>
+            <h2>Накъде ще пътуваме?</h2>
+            <p>
+                Разкажи ни какво търсиш, а ние ще ти помогнем
+                да организираш идеалното пътуване.
+            </p>
+        </div>
+
+        <div class="trip-form-card">
+
+            <div class="trip-form-header">
+                <div class="form-header-icon">✈</div>
+                <div>
+                    <h3>Планирай своето пътуване</h3>
+                    <p>Попълни информацията за своето приключение.</p>
+                </div>
+            </div>
+
+            <form id="tripPlannerForm">
+
+                <div class="trip-form-grid">
+
+                    <div class="trip-field field-full">
+                        <label for="destination">Дестинация</label>
+                        <div class="trip-input-wrapper">
+                            <span>📍</span>
+                            <input type="text"
+                                   id="destination"
+                                   name="destination"
+                                   placeholder="Например: Рим, Италия"
+                                   required />
+                        </div>
+                    </div>
+
+                    <div class="trip-field">
+                        <label for="startDate">Начална дата</label>
+                        <input type="date"
+                               id="startDate"
+                               name="startDate"
+                               required />
+                    </div>
+
+                    <div class="trip-field">
+                        <label for="endDate">Крайна дата</label>
+                        <input type="date"
+                               id="endDate"
+                               name="endDate"
+                               required />
+                    </div>
+
+                    <div class="trip-field">
+                        <label for="budget">Общ бюджет</label>
+                        <div class="trip-input-wrapper">
+                            <input type="number"
+                                   id="budget"
+                                   name="budget"
+                                   placeholder="Например: 800"
+                                   min="1"
+                                   required />
+                            <span class="input-suffix">€</span>
+                        </div>
+                    </div>
+
+                    <div class="trip-field">
+                        <label for="travelers">Брой пътуващи</label>
+                        <select id="travelers" name="travelers">
+                            <option value="1">1 човек</option>
+                            <option value="2" selected>2 души</option>
+                            <option value="3">3 души</option>
+                            <option value="4">4 души</option>
+                            <option value="5">5 души</option>
+                            <option value="6">6 или повече</option>
+                        </select>
+                    </div>
+
+                    <div class="trip-field field-full">
+                        <label>Какъв тип пътуване предпочиташ?</label>
+
+                        <div class="travel-type-options">
+                            <label class="travel-option">
+                                <input type="radio"
+                                       name="travelType"
+                                       value="Култура"
+                                       checked />
+                                <span>🏛️ Култура</span>
+                            </label>
+
+                            <label class="travel-option">
+                                <input type="radio"
+                                       name="travelType"
+                                       value="Природа" />
+                                <span>🏔️ Природа</span>
+                            </label>
+
+                            <label class="travel-option">
+                                <input type="radio"
+                                       name="travelType"
+                                       value="Море" />
+                                <span>🏖️ Море</span>
+                            </label>
+
+                            <label class="travel-option">
+                                <input type="radio"
+                                       name="travelType"
+                                       value="Приключения" />
+                                <span>🧗 Приключения</span>
+                            </label>
+
+                            <label class="travel-option">
+                                <input type="radio"
+                                       name="travelType"
+                                       value="Релакс" />
+                                <span>🌿 Релакс</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="trip-field field-full">
+                        <label for="interests">Допълнителни интереси</label>
+                        <textarea id="interests"
+                                  name="interests"
+                                  rows="3"
+                                  placeholder="Например: местна кухня, музеи, красиви гледки, скрити места..."></textarea>
+                    </div>
+
+                </div>
+
+                <button type="button"
+                        class="trip-submit-button"
+                        onclick="alert('Формулярът е готов за следващия етап! AI генерирането ще бъде добавено по-късно.')">
+                    ✨ Създай моето приключение
+                    <span>→</span>
+                </button>
+
+                <p class="trip-form-note">
+                    Персонализирано пътуване, съобразено с твоите желания.
+                </p>
+
+            </form>
+        </div>
+
+    </section>
+
+
+    <!-- DESTINATIONS SECTION -->
+    <section class="destinations-section">
+
+        <div class="destinations-heading">
+            <div class="home-section-heading">
+                <span class="home-section-label">EXPLORE THE WORLD</span>
+                <h2>Открий следващата си дестинация</h2>
+                <p>
+                    Вдъхнови се от някои от най-красивите места по света.
+                </p>
+            </div>
+
+            <a href="#plan-trip" class="view-all-link">
+                Планирай пътуване →
+            </a>
+        </div>
+
+        <div class="destination-grid">
+
+            <article class="destination-card">
+                <div class="destination-image">
+                    <img src="/images/rome.jpg"
+                         alt="Колизеумът в Рим" />
+                    <span class="destination-tag">История и култура</span>
+                </div>
+                <div class="destination-info">
+                    <div>
+                        <h3>Рим, Италия</h3>
+                        <p>🏛️ История, архитектура и италианска кухня</p>
+                    </div>
+                    <a href="#plan-trip"
+                       class="destination-arrow"
+                       aria-label="Планирай пътуване до Рим">↗</a>
+                </div>
+            </article>
+
+            <article class="destination-card">
+                <div class="destination-image">
+                    <img src="/images/france.jpg"
+                         alt="Айфеловата кула в Париж" />
+                    <span class="destination-tag">Романтика</span>
+                </div>
+                <div class="destination-info">
+                    <div>
+                        <h3>Париж, Франция</h3>
+                        <p>🗼 Изкуство, уютни кафенета и романтика</p>
+                    </div>
+                    <a href="#plan-trip"
+                       class="destination-arrow"
+                       aria-label="Планирай пътуване до Париж">↗</a>
+                </div>
+            </article>
+
+            <article class="destination-card">
+                <div class="destination-image">
+                    <img src="/images/switzerland.jpg"
+                         alt="Планински пейзаж и северно сияние" />
+                    <span class="destination-tag">Природа</span>
+                </div>
+                <div class="destination-info">
+                    <div>
+                        <h3>Швейцария</h3>
+                        <p>🏔️ Планини, езера и впечатляващи гледки</p>
+                    </div>
+                    <a href="#plan-trip"
+                       class="destination-arrow"
+                       aria-label="Планирай пътуване до Швейцария">↗</a>
+                </div>
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- WHY SMART TRIP SECTION -->
+    <section class="why-smart-trip">
+
+        <div class="why-smart-trip-content">
+            <span class="home-section-label">TRAVEL SMARTER</span>
+            <h2>По-малко планиране.<br />Повече преживявания.</h2>
+            <p>
+                От избора на дестинация до последния детайл –
+                Smart TrIP ще ти помогне да организираш своето
+                следващо приключение на едно място.
+            </p>
+
+            <a asp-controller="Home"
+               asp-action="AboutUs"
+               class="home-secondary-button">
+                Научи повече за нас →
+            </a>
+        </div>
+
+        <div class="why-smart-trip-decoration">
+            <div class="decoration-circle">🌍</div>
+            <span class="decoration-star star-one">✦</span>
+            <span class="decoration-star star-two">✧</span>
+            <span class="decoration-plane">✈</span>
+        </div>
+
+    </section>
+
 </div>
