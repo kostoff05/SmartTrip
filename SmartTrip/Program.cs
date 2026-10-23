@@ -9,6 +9,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddHttpClient<SmartTrip.Services.WeatherService>();
+builder.Services.AddHttpClient<SmartTrip.Services.AiService>();
 
 var app = builder.Build();
 

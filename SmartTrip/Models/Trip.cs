@@ -21,5 +21,7 @@ namespace SmartTrip.Models
         public List<Destination> Destinations { get; set; } = new List<Destination>();
 
         public string? TravelTypes { get; set; }
+
+        public string? AiRecommendation { get; set; }
     }
 }

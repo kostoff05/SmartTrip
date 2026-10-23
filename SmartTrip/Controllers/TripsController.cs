@@ -10,15 +10,15 @@ namespace SmartTrip.Controllers
     {
         private readonly AppDbContext _context;
         private readonly WeatherService _weatherService;
+        private readonly AiService _aiService; // Добавяме AI услугата
 
-        // Конструктор за инжектиране на зависимостите
-        public TripsController(AppDbContext context, WeatherService weatherService)
+        public TripsController(AppDbContext context, WeatherService weatherService, AiService aiService)
         {
             _context = context;
             _weatherService = weatherService;
+            _aiService = aiService;
         }
 
-        // 1. Списък с пътувания (взима времето на живо за всяко от тях)
         public async Task<IActionResult> Index()
         {
             var trips = await _context.Trips.ToListAsync();
@@ -34,19 +34,12 @@ namespace SmartTrip.Controllers
             return View(trips);
         }
 
-        // 2. Детайли за конкретно пътуване
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var trip = await _context.Trips.FirstOrDefaultAsync(m => m.Id == id);
-            if (trip == null)
-            {
-                return NotFound();
-            }
+            if (trip == null) return NotFound();
 
             if (!string.IsNullOrEmpty(trip.City))
             {
@@ -56,7 +49,6 @@ namespace SmartTrip.Controllers
             return View(trip);
         }
 
-        // 3. Създаване на ново пътуване
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(string destination, string budget, List<string> travelTypes, string interests)
@@ -67,6 +59,9 @@ namespace SmartTrip.Controllers
 
             string weatherInfo = await _weatherService.GetWeatherAsync(destination);
 
+            // Генерираме AI съвет за дестинацията
+            string aiRecommendation = await _aiService.GenerateTravelTipAsync(destination, combinedTravelTypes, budget);
+
             var trip = new Trip
             {
                 City = destination,
@@ -74,6 +69,7 @@ namespace SmartTrip.Controllers
                 TravelTypes = combinedTravelTypes,
                 Interests = interests,
                 WeatherInfo = weatherInfo,
+                AiRecommendation = aiRecommendation, // Записваме съвета в базата данни
                 CreatedDate = DateTime.Now
             };
 
@@ -83,7 +79,6 @@ namespace SmartTrip.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // 4. Изтриване на пътуване
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

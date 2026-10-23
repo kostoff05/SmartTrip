@@ -57,6 +57,9 @@ namespace SmartTrip.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("AiRecommendation")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Budget")
                         .IsRequired()
                         .HasColumnType("TEXT");

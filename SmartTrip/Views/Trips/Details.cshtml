@@ -21,6 +21,9 @@
             <dt class="col-sm-3">Информация за времето:</dt>
             <dd class="col-sm-9 text-success">@Model.WeatherInfo</dd>
 
+            <dt class="col-sm-3">AI Препоръка:</dt>
+            <dd class="col-sm-9">@Html.Raw(Model.AiRecommendation)</dd>
+
             <dt class="col-sm-3">Дата на създаване:</dt>
             <dd class="col-sm-9">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</dd>
         </dl>
@@ -28,7 +31,6 @@
         <div class="mt-3 d-flex justify-content-between align-items-center">
             <a asp-action="Index" class="btn btn-secondary">← Обратно към списъка</a>
 
-            <!-- Бутон за изтриване директно от детайлите -->
             <form asp-action="Delete" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('Сигурни ли сте, че искате да изтриете това пътуване?');">
                 <button type="submit" class="btn btn-danger">Изтрий пътуването</button>
             </form>
