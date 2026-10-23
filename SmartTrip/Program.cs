@@ -8,6 +8,7 @@ builder.Services.AddControllersWithViews();
 // Казваме на приложението да ползва нашия AppDbContext и SQLite с връзката от appsettings.json
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddHttpClient<SmartTrip.Services.WeatherService>();
 
 var app = builder.Build();
 

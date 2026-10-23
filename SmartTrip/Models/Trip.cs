@@ -7,17 +7,19 @@ namespace SmartTrip.Models
         public int Id { get; set; }
 
         [Required]
-        public string City { get; set; } // Търсения град (напр. "Рим")
+        public string City { get; set; } // Дестинацията (напр. "Рим")
 
-        public string Budget { get; set; } // Бюджет (Нисък, Среден, Висок)
+        public string Budget { get; set; } // Бюджет
 
-        public string WeatherInfo { get; set; } // Информация за времето от API
+        public string? TravelType { get; set; } // Тип пътуване (Култура, Природа и т.н.)
 
-        public string PackingList { get; set; } // Списък за багаж от AI
+        public string? Interests { get; set; } // Допълнителни интереси
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
-        // Списък със забележителности към това пътуване
+        public string? WeatherInfo { get; set; }
         public List<Destination> Destinations { get; set; } = new List<Destination>();
+
+        public string? TravelTypes { get; set; }
     }
 }

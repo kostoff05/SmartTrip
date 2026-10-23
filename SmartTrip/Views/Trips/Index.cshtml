@@ -6,12 +6,13 @@
 
     @if (Model != null && Model.Any())
     {
-        <table class="table table-striped">
+        <table class="table table-striped align-middle">
             <thead>
                 <tr>
                     <th>Град</th>
                     <th>Бюджет</th>
                     <th>Информация за времето</th>
+                    <th class="text-end">Действия</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,6 +22,15 @@
                         <td>@trip.City</td>
                         <td>@trip.Budget лв.</td>
                         <td>@trip.WeatherInfo</td>
+                        <td class="text-end">
+                            <!-- Бутон за детайли -->
+                            <a asp-action="Details" asp-route-id="@trip.Id" class="btn btn-sm btn-info text-white">Детайли</a>
+
+                            <!-- Форма за изтриване -->
+                            <form asp-action="Delete" asp-route-id="@trip.Id" method="post" class="d-inline" onsubmit="return confirm('Сигурни ли сте, че искате да изтриете това пътуване?');">
+                                <button type="submit" class="btn btn-sm btn-danger">Изтрий</button>
+                            </form>
+                        </td>
                     </tr>
                 }
             </tbody>

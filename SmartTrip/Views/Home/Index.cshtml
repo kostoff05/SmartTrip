@@ -54,7 +54,7 @@
                 </div>
             </div>
 
-            <form id="tripPlannerForm">
+            <form asp-controller="Trips" asp-action="Create" method="post">
 
                 <div class="trip-form-grid">
 
@@ -154,18 +154,42 @@
                     </div>
 
                     <div class="trip-field field-full">
-                        <label for="interests">Допълнителни интереси</label>
-                        <textarea id="interests"
-                                  name="interests"
-                                  rows="3"
-                                  placeholder="Например: местна кухня, музеи, красиви гледки, скрити места..."></textarea>
+                        <label>Какви типове преживявания предпочиташ? (Можеш да избереш няколко)</label>
+
+                        <div class="travel-type-options">
+                            <label class="travel-option">
+                                <input type="checkbox" name="travelTypes" value="Култура и история" />
+                                <span>🏛️ Култура и история</span>
+                            </label>
+
+                            <label class="travel-option">
+                                <input type="checkbox" name="travelTypes" value="Местна кухня и гурме" />
+                                <span>🍲 Местна кухня</span>
+                            </label>
+
+                            <label class="travel-option">
+                                <input type="checkbox" name="travelTypes" value="Природа" />
+                                <span>🏔️ Природа</span>
+                            </label>
+
+                            <label class="travel-option">
+                                <input type="checkbox" name="travelTypes" value="Море" />
+                                <span>🏖️ Море</span>
+                            </label>
+
+                            <label class="travel-option">
+                                <input type="checkbox" name="travelTypes" value="Приключения" />
+                                <span>🧗 Приключения</span>
+                            </label>
+
+                            <label class="travel-option">
+                                <input type="checkbox" name="travelTypes" value="Релакс" />
+                                <span>🌿 Релакс</span>
+                            </label>
+                        </div>
                     </div>
 
-                </div>
-
-                <button type="button"
-                        class="trip-submit-button"
-                        onclick="alert('Формулярът е готов за следващия етап! AI генерирането ще бъде добавено по-късно.')">
+                <button type="submit" class="trip-submit-button">
                     ✨ Създай моето приключение
                     <span>→</span>
                 </button>
