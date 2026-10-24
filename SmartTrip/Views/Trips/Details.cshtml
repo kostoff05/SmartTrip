@@ -1,39 +1,120 @@
 ﻿@model SmartTrip.Models.Trip
 
-<div class="container mt-4">
-    <h2>Детайли за пътуването 🌍</h2>
-    <hr />
-
-    <div class="card p-4 shadow-sm">
-        <dl class="row">
-            <dt class="col-sm-3">Дестинация (Град):</dt>
-            <dd class="col-sm-9"><strong>@Model.City</strong></dd>
-
-            <dt class="col-sm-3">Бюджет:</dt>
-            <dd class="col-sm-9">@Model.Budget лв.</dd>
-
-            <dt class="col-sm-3">Тип преживяване:</dt>
-            <dd class="col-sm-9">@Model.TravelTypes</dd>
-
-            <dt class="col-sm-3">Интереси:</dt>
-            <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Interests) ? "Няма въведени" : Model.Interests)</dd>
-
-            <dt class="col-sm-3">Информация за времето:</dt>
-            <dd class="col-sm-9 text-success">@Model.WeatherInfo</dd>
-
-            <dt class="col-sm-3">AI Препоръка:</dt>
-            <dd class="col-sm-9">@Html.Raw(Model.AiRecommendation)</dd>
-
-            <dt class="col-sm-3">Дата на създаване:</dt>
-            <dd class="col-sm-9">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</dd>
-        </dl>
-
-        <div class="mt-3 d-flex justify-content-between align-items-center">
-            <a asp-action="Index" class="btn btn-secondary">← Обратно към списъка</a>
-
-            <form asp-action="Delete" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('Сигурни ли сте, че искате да изтриете това пътуване?');">
-                <button type="submit" class="btn btn-danger">Изтрий пътуването</button>
-            </form>
+<div class="container py-5">
+    <!-- Горна лента със заглавие и бутон за връщане -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold text-dark mb-1">Детайли за пътуване: <span class="text-primary">@Model.City</span> 🌍</h1>
+            <p class="text-muted mb-0">Създадено на: @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</p>
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
+                ← Назад към списъка
+            </a>
         </div>
     </div>
+
+    <!-- Информационни ленти / Карточки за бърз преглед -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="p-3 bg-white border-0 shadow-sm rounded-4 h-100 d-flex align-items-center">
+                <div class="fs-2 me-3">💰</div>
+                <div>
+                    <small class="text-muted d-block">Бюджет</small>
+                    <span class="fw-bold fs-5 text-dark">@Model.Budget €</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 bg-white border-0 shadow-sm rounded-4 h-100 d-flex align-items-center">
+                <div class="fs-2 me-3">🌤️</div>
+                <div>
+                    <small class="text-muted d-block">Време</small>
+                    <span class="fw-bold fs-5 text-success">@Model.WeatherInfo</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 bg-white border-0 shadow-sm rounded-4 h-100 d-flex align-items-center">
+                <div class="fs-2 me-3">🎒</div>
+                <div>
+                    <small class="text-muted d-block">Тип преживяване</small>
+                    <span class="fw-semibold text-dark text-truncate d-inline-block" style="max-width: 200px;" title="@Model.TravelTypes">@Model.TravelTypes</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основна кутия с AI Пътеводителя -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white mb-4">
+        <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+            <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary me-3 fs-4">
+                ✨
+            </div>
+            <div>
+                <h3 class="fw-bold mb-0">Интелигентен пътеводител (AI)</h3>
+                <p class="text-muted mb-0">Персонализирани препоръки, забележителности и съвети за Вашия престой</p>
+            </div>
+        </div>
+
+        <!-- Съдържанието от ИИ с подсилени стилове за списъците -->
+        <div class="ai-content text-secondary">
+            @Html.Raw(Model.AiRecommendation)
+        </div>
+    </div>
+
+    <!-- СЕКЦИЯ: Google Maps Карта на дестинацията -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 p-md-4 bg-white mb-4">
+        <div class="d-flex align-items-center mb-3">
+            <div class="fs-3 me-2">📍</div>
+            <h3 class="fw-bold mb-0">Карта на дестинацията: <span class="text-primary">@Model.City</span></h3>
+        </div>
+        <p class="text-muted mb-3">Интерактивно разглеждане на географското положение и ключовите точки в района.</p>
+
+        <div class="ratio ratio-16x9 rounded-4 overflow-hidden shadow-sm">
+            <iframe src="https://www.google.com/maps?q=@Uri.EscapeDataString(Model.City)&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                    width="100%"
+                    height="450"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy">
+            </iframe>
+        </div>
+    </div>
+
+    <!-- Бутон за изтриване в дъното -->
+    <div class="text-end">
+        <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline" onsubmit="return confirm('Сигурни ли сте, че искате да изтриете това пътуване?');">
+            <button type="submit" class="btn btn-outline-danger rounded-pill px-4">
+                🗑️ Изтрий това пътуване
+            </button>
+        </form>
+    </div>
 </div>
+
+<style>
+    /* Почистване и разкрасяване на HTML таговете, идващи от AI */
+    .ai-content h4 {
+        color: #212529;
+        font-weight: 700;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+        border-left: 4px solid #0d6efd;
+        padding-left: 10px;
+    }
+
+    .ai-content ul {
+        padding-left: 1.2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .ai-content li {
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+    }
+
+    .ai-content p {
+        line-height: 1.6;
+    }
+</style>

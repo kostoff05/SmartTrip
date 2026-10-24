@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+﻿
 using System.Text;
 using System.Text.Json;
 
@@ -9,28 +9,29 @@ namespace SmartTrip.Services
         private readonly HttpClient _httpClient;
         private readonly string? _apiKey;
 
-        public AiService(HttpClient httpClient, IConfiguration configuration)
+        public AiService(
+            HttpClient httpClient,
+            IConfiguration configuration)
         {
             _httpClient = httpClient;
-            _apiKey = configuration["GeminiSettings:ApiKey"];
+            _apiKey = configuration["GeminiSettings:ApiKey"]?.Trim();
         }
 
-        public async Task<string> GenerateTravelTipAsync(string city, string travelTypes, string budget)
+        public async Task<string> GenerateTravelTipAsync(
+            string city,
+            string travelTypes,
+            string budget)
         {
-            if (string.IsNullOrEmpty(city)) return "Няма достатъчно данни за AI анализ.";
+            if (string.IsNullOrWhiteSpace(city))
+                return "Няма достатъчно данни за AI анализ.";
 
-            if (string.IsNullOrEmpty(_apiKey))
-            {
-                return "ГРЕШКА: Ключът липсва в appsettings.json!";
-            }
+            if (string.IsNullOrWhiteSpace(_apiKey))
+                return "ГРЕШКА: Липсва Gemini API ключ!";
 
             try
             {
-                // За AQ... ключове ползваме стандартния URL без ?key= накрая
-                string url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
-
-                // Подаваме ключа като Bearer token в хедъра на заявката
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
+                string url =
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent";
 
                 var requestBody = new
                 {
@@ -40,25 +41,69 @@ namespace SmartTrip.Services
                         {
                             parts = new[]
                             {
-                                new { text = $"Напиши подробен туристически пътеводител за град {city} на български език. Бюджет: {budget} лв., интереси: {travelTypes}. Използвай HTML тагове (като <h4>, <ul>, <li>, <strong>) за следните секции: 1. Летища и Трансфери с цени, 2. Топ Забележителности, 3. Скрити Места, 4. Ресторанти." }
+                                new
+                                {
+                                    text = $"""
+                                    Напиши подробен туристически
+                                    пътеводител за град {city}
+                                    на български език.
+
+                                    Бюджет: {budget} €.
+
+                                    ВАЖНО:
+                                    - Използвай само евро (EUR, €) за всички цени.
+                                    - България използва еврото от 1 януари 2026 г.
+                                    - Не използвай български левове (BGN, лв.).
+                                    - Всички цени за хотели, ресторанти, транспорт
+                                      и забележителности трябва да бъдат в евро.
+                                    - Не измисляй точни цени, ако нямаш актуални данни.
+
+                                    Интереси: {travelTypes}.
+
+                                    Използвай HTML тагове:
+                                    <h4>, <ul>, <li>, <strong>.
+
+                                    Включи следните секции:
+                                    1. Летища и трансфери с цени
+                                    2. Топ забележителности
+                                    3. Скрити места
+                                    4. Ресторанти
+                                    """
+                                }
                             }
                         }
                     }
                 };
 
-                string jsonContent = JsonSerializer.Serialize(requestBody);
-                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                string jsonContent =
+                    JsonSerializer.Serialize(requestBody);
 
-                var response = await _httpClient.PostAsync(url, content);
+                using var request = new HttpRequestMessage(
+                    HttpMethod.Post, url);
+
+                request.Headers.Add(
+                    "X-goog-api-key", _apiKey);
+
+                request.Content = new StringContent(
+                    jsonContent,
+                    Encoding.UTF8,
+                    "application/json");
+
+                using var response =
+                    await _httpClient.SendAsync(request);
+
+                string responseString =
+                    await response.Content.ReadAsStringAsync();
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    string errorDetails = await response.Content.ReadAsStringAsync();
-                    return $"Грешка от Google API ({response.StatusCode}): {errorDetails}";
+                    return $"Грешка от Gemini API " +
+                           $"({response.StatusCode}): " +
+                           responseString;
                 }
 
-                string responseString = await response.Content.ReadAsStringAsync();
-                using var doc = JsonDocument.Parse(responseString);
+                using var doc =
+                    JsonDocument.Parse(responseString);
 
                 var text = doc.RootElement
                     .GetProperty("candidates")[0]
@@ -67,11 +112,13 @@ namespace SmartTrip.Services
                     .GetProperty("text")
                     .GetString();
 
-                return text?.Trim() ?? "Няма генериран отговор.";
+                return text?.Trim()
+                    ?? "Няма генериран отговор.";
             }
             catch (Exception ex)
             {
-                return $"Възникна грешка при връзка с AI асистента: {ex.Message}";
+                return "Възникна грешка при връзка " +
+                       "с AI асистента: " + ex.Message;
             }
         }
     }
