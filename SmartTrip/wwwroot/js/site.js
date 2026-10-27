@@ -1,4 +1,19 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿document.addEventListener("DOMContentLoaded", function () {
+    const title = document.getElementById("typing-title");
 
-// Write your JavaScript code.
+    if (!title) return;
+
+    const text = "Пътувай умно.";
+    let index = 0;
+
+    function typeText() {
+        if (index < text.length) {
+            title.textContent += text.charAt(index);
+            index++;
+
+            setTimeout(typeText, 100);
+        }
+    }
+
+    typeText();
+});

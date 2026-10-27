@@ -6,32 +6,70 @@
 
     <!-- Hero секция -->
     <section class="about-hero">
-        <div class="hero-overlay">
-            <div class="hero-content">
-                <span class="hero-label">✈ Smart TrIP</span>
+        <div class="about-hero-inner">
 
-                <h1>Пътувай умно.<br />Откривай повече.</h1>
+            <div class="about-hero-text">
+                <span class="hero-label">
+                    <span>✈</span> ПОВЕЧЕ ОТ ЕДНО ПЪТУВАНЕ
+                </span>
+
+                <h1>
+                    Светът е голям.
+                    <span>Открий го по свой начин.</span>
+                </h1>
 
                 <p>
-                    Твоят интелигентен помощник за пътувания,
-                    който превръща всяка идея в незабравимо приключение.
+                    Създадохме Smart TrIP, за да превърнем идеите ти
+                    в пътувания, които си струва да бъдат преживени.
+                    По-малко време в планиране и повече време за приключения.
                 </p>
 
                 <a asp-controller="Home"
                    asp-action="Index"
                    asp-fragment="plan-trip"
                    class="about-button">
-                    ✨ Планирай пътуване
+                    Открий Smart TrIP
                     <span>→</span>
                 </a>
+
+                <div class="about-hero-note">
+                    <span>✦</span>
+                    Твоята идея. Твоят маршрут. Твоето приключение.
+                </div>
             </div>
+
+            <div class="about-hero-visual">
+                <div class="about-hero-image"></div>
+
+                <div class="hero-floating-card">
+                    <span class="floating-icon">🌍</span>
+                    <div>
+                        <strong>Светът те очаква</strong>
+                        <p>Време е за ново приключение</p>
+                    </div>
+                </div>
+
+                <div class="hero-image-badge">
+                    <span>✈</span> EXPLORE MORE
+                </div>
+            </div>
+
         </div>
     </section>
 
     <!-- Нашата мисия -->
     <section class="mission-section">
+
+        <!-- СНИМКА ВЛЯВО -->
+        <div class="mission-card">
+            <div class="mission-pic">
+                <img src="/images/collage.png" alt="Пътувания със Smart TrIP">
+            </div>
+        </div>
+
+        <!-- ТЕКСТ ВДЯСНО -->
         <div class="mission-text">
-            <span class="section-label">НАШАТА МИСИЯ</span>
+            <span class="about-section-label">НАШАТА МИСИЯ</span>
 
             <h2>Всяко пътуване започва с добра идея.</h2>
 
@@ -53,15 +91,12 @@
             </p>
         </div>
 
-        <div class="mission-card">
-            <div class="mission-pic"><img src="/images/collage.png"></div>
-        </div>
     </section>
 
     <!-- Как работи приложението -->
     <section class="how-it-works">
         <div class="section-heading">
-            <span class="section-label">КАК РАБОТИ</span>
+            <span class="about-section-label">КАК РАБОТИ</span>
             <h2 class="four-steps">Твоето пътуване в 4 лесни стъпки</h2>
             <p >От първоначалната идея до готовия маршрут.</p>
         </div>
@@ -120,7 +155,7 @@
     <!-- Предимства -->
     <section class="benefits-section">
         <div class="section-heading">
-            <span class="section-label">ЗАЩО Smart TrIP?</span>
+            <span class="about-section-label">ЗАЩО Smart TrIP?</span>
             <h2>Всичко необходимо за едно по-добро пътуване</h2>
         </div>
 

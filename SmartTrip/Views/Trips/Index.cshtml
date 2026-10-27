@@ -4,115 +4,222 @@
     ViewData["Title"] = "Моите пътувания";
 }
 
-<div class="container py-5">
+<div class="trips-page">
 
-    <div class="text-center mb-5">
-        <h1 class="fw-bold">✈️ Моите пътувания</h1>
+    <!-- HERO SECTION -->
+    <section class="trips-hero">
+        <div class="trips-hero-decoration trips-decoration-one"></div>
+        <div class="trips-hero-decoration trips-decoration-two"></div>
 
-        <p class="text-muted">
-            Разгледай всички приключения, които си планирал със SmartTrip.
-        </p>
+        <div class="container trips-hero-content">
 
-        <a asp-controller="Home"
-           asp-action="Index"
-           asp-fragment="plan-trip"
-           class="btn btn-primary mt-3">
-            ✨ Планирай ново пътуване
-        </a>
-    </div>
+            <div class="trips-eyebrow">
+                <span>✦</span> YOUR TRAVEL COLLECTION
+            </div>
 
-    @if (Model == null || !Model.Any())
-    {
-        <div class="text-center p-5 bg-light rounded-4">
+            <h1>
+                Моите пътувания<span>.</span>
+            </h1>
 
-            <h2>🌍 Все още нямаш пътувания</h2>
-
-            <p class="text-muted mt-3">
-                Време е да планираш първото си приключение!
+            <p>
+                Всяко приключение започва с една идея.
+                Съхрани любимите си планове и открий
+                следващата си дестинация със Smart TrIP.
             </p>
 
             <a asp-controller="Home"
                asp-action="Index"
                asp-fragment="plan-trip"
-               class="btn btn-success mt-3">
-                Създай първото си пътуване
+               class="trips-primary-button">
+                <span>＋</span>
+                Планирай ново пътуване
+                <span class="trips-button-arrow">→</span>
             </a>
 
         </div>
-    }
-    else
-    {
-        <div class="row g-4">
+    </section>
 
-            @foreach (var trip in Model)
+    <!-- SAVED TRIPS -->
+    <section class="trips-content container">
+
+        
+        <div class="trips-section-heading">
+            <div class="trips-section-info">
+                <span class="trips-section-label">YOUR ADVENTURES</span>
+                <h2>Твоята колекция</h2>
+                <p>Всички твои планове, събрани на едно място.</p>
+            </div>
+
+            @if (Model != null && Model.Any())
             {
-                <div class="col-md-6 col-lg-4">
+                <div class="trips-summary">
+                    <div class="trips-summary-icon">✈</div>
+                    <div>
+                        <strong>@Model.Count()</strong>
+                        <span>
+                            @(Model.Count() == 1
+                                ? "запазено пътуване"
+                                : "запазени пътувания")
+                        </span>
+                    </div>
+                </div>
+            }
+        </div>
 
-                    <div class="card h-100 shadow-sm border-0 rounded-4">
 
-                        <div class="card-body p-4">
+        @if (Model == null || !Model.Any())
+        {
+            <!-- EMPTY STATE -->
+            <div class="trips-empty-state">
 
-                            <h3 class="card-title fw-bold">
-                                📍 @trip.City
-                            </h3>
+                <div class="empty-illustration">
+                    <div class="empty-sun"></div>
+                    <div class="empty-cloud">☁</div>
+                    <div class="empty-globe">🌍</div>
+                    <div class="empty-plane">✈</div>
+                    <div class="empty-star empty-star-one">✦</div>
+                    <div class="empty-star empty-star-two">✧</div>
+                </div>
 
-                            <p class="text-muted">
-                                🗓️ Създадено на:
-                                @trip.CreatedDate.ToString("dd.MM.yyyy")
-                            </p>
+                <span class="empty-label">ТВОЕТО СЛЕДВАЩО ПРИКЛЮЧЕНИЕ</span>
 
-                            @if (trip.StartDate.HasValue &&
-                                 trip.EndDate.HasValue)
-                            {
-                                <p>
-                                    📅
-                                    @trip.StartDate.Value.ToString("dd.MM.yyyy")
-                                    -
-                                    @trip.EndDate.Value.ToString("dd.MM.yyyy")
-                                </p>
-                            }
+                <h2>Още не си поел на път?</h2>
 
-                            <p>
-                                👥 Пътуващи:
-                                @(trip.Travelers > 0 ? trip.Travelers : 2)
-                            </p>
+                <p>
+                    Тук ще откриеш всички пътувания, които планираш.
+                    Създай първото си и превърни идеята си в приключение!
+                </p>
 
-                            <p>
-                                💶 Бюджет:
-                                @trip.Budget €
-                            </p>
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   asp-fragment="plan-trip"
+                   class="trips-primary-button">
+                    ✨ Създай първото си пътуване
+                    <span class="trips-button-arrow">→</span>
+                </a>
 
-                            <p>
-                                🎯 Тип:
-                                @trip.TravelType
-                            </p>
+            </div>
+        }
+        else
+        {
+            <div class="trips-grid">
 
-                            <div class="d-flex gap-2 mt-4">
+                @foreach (var trip in Model)
+                {
+                    <article class="trip-card">
+
+                        <div class="trip-card-top">
+
+                            <div class="trip-card-icon">✈</div>
+
+                            <div class="trip-card-decoration">✦</div>
+
+                            <div class="trip-card-destination">
+                                <span>ТВОЯТА ДЕСТИНАЦИЯ</span>
+                                <h3>📍 @trip.City</h3>
+                            </div>
+
+                        </div>
+
+                        <div class="trip-card-body">
+
+                            <div class="trip-created">
+                                <span>Добавено в колекцията</span>
+                                <strong>
+                                    @trip.CreatedDate.ToString("dd.MM.yyyy")
+                                </strong>
+                            </div>
+
+                            <div class="trip-info-grid">
+
+                                <div class="trip-info-item">
+                                    <span class="trip-info-icon">📅</span>
+                                    <div>
+                                        <small>Период</small>
+                                        <strong>
+                                            @if (trip.StartDate.HasValue &&
+                                                 trip.EndDate.HasValue)
+                                            {
+                                                @trip.StartDate.Value.ToString("dd.MM.yyyy")
+                                                <span> – </span>
+                                                @trip.EndDate.Value.ToString("dd.MM.yyyy")
+                                            }
+                                            else
+                                            {
+                                                <span>Не е посочен</span>
+                                            }
+                                        </strong>
+                                    </div>
+                                </div>
+
+                                <div class="trip-info-item">
+                                    <span class="trip-info-icon">👥</span>
+                                    <div>
+                                        <small>Пътуващи</small>
+                                        <strong>
+                                            @(trip.Travelers > 0
+                                                ? trip.Travelers
+                                                : 2)
+                                        </strong>
+                                    </div>
+                                </div>
+
+                                <div class="trip-info-item">
+                                    <span class="trip-info-icon">💶</span>
+                                    <div>
+                                        <small>Бюджет</small>
+                                        <strong>@trip.Budget €</strong>
+                                    </div>
+                                </div>
+
+                                <div class="trip-info-item">
+                                    <span class="trip-info-icon">🧭</span>
+                                    <div>
+                                        <small>Тип пътуване</small>
+                                        <strong>@trip.TravelType</strong>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="trip-card-actions">
 
                                 <a asp-controller="Trips"
                                    asp-action="Details"
                                    asp-route-id="@trip.Id"
-                                   class="btn btn-primary flex-grow-1">
-                                    👁️ Детайли
+                                   class="trip-details-button">
+                                    Виж пътуването
+                                    <span>→</span>
                                 </a>
 
                                 <a asp-controller="Trips"
                                    asp-action="Delete"
                                    asp-route-id="@trip.Id"
-                                   class="btn btn-outline-danger">
-                                    🗑️
+                                   class="trip-delete-button"
+                                   title="Изтрий пътуването"
+                                   aria-label="Изтрий пътуването">
+                                    🗑
                                 </a>
 
                             </div>
 
                         </div>
 
-                    </div>
+                    </article>
+                }
 
-                </div>
-            }
+            </div>
+        }
 
+        <!-- BOTTOM NOTE -->
+        <div class="trips-bottom-note">
+            <span>✦</span>
+            <p>
+                Светът е голям, а твоите приключения тепърва започват.
+            </p>
+            <span>✦</span>
         </div>
-    }
+
+    </section>
 
 </div>
