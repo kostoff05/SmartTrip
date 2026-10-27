@@ -1,0 +1,93 @@
+﻿@model SmartTrip.Models.Trip
+
+@{
+    ViewData["Title"] = "Изтриване на пътуване";
+}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-7 col-lg-6">
+
+            <div class="card border-0 shadow rounded-4">
+
+                <div class="card-body p-5 text-center">
+
+                    <div style="font-size: 55px;">
+                        🗑️
+                    </div>
+
+                    <h2 class="fw-bold mt-3">
+                        Изтриване на пътуване
+                    </h2>
+
+                    <p class="text-muted mt-3">
+                        Сигурен ли си, че искаш да изтриеш
+                        това пътуване?
+                    </p>
+
+                    <div class="bg-light rounded-4 p-4 my-4">
+
+                        <h3 class="fw-bold">
+                            📍 @Model.City
+                        </h3>
+
+                        @if (Model.StartDate.HasValue &&
+                             Model.EndDate.HasValue)
+                        {
+                            <p class="mb-2">
+                                📅
+                                @Model.StartDate.Value.ToString("dd.MM.yyyy")
+                                -
+                                @Model.EndDate.Value.ToString("dd.MM.yyyy")
+                            </p>
+                        }
+
+                        <p class="mb-0">
+                            💶 Бюджет: @Model.Budget €
+                        </p>
+
+                    </div>
+
+                    <p class="text-danger">
+                        ⚠️ Това действие не може да бъде отменено.
+                    </p>
+
+                    <form asp-controller="Trips"
+                          asp-action="Delete"
+                          asp-route-id="@Model.Id"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="id"
+                               value="@Model.Id" />
+
+                        <div class="d-flex gap-3 mt-4">
+
+                            <a asp-controller="Trips"
+                               asp-action="Index"
+                               class="btn btn-outline-secondary flex-fill">
+                                ← Отказ
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-danger flex-fill">
+                                🗑️ Да, изтрий
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

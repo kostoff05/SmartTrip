@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SmartTrip.Models
 {
@@ -7,21 +9,37 @@ namespace SmartTrip.Models
         public int Id { get; set; }
 
         [Required]
-        public string City { get; set; } // Дестинацията (напр. "Рим")
+        public string City { get; set; } = string.Empty;
 
-        public string Budget { get; set; } // Бюджет
+        public string Budget { get; set; } = string.Empty;
 
-        public string? TravelType { get; set; } // Тип пътуване (Култура, Природа и т.н.)
+        public string? TravelType { get; set; }
 
-        public string? Interests { get; set; } // Допълнителни интереси
+        public string? Interests { get; set; }
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
+        // Начална и крайна дата на пътуването
+        public DateTime? StartDate { get; set; }
+
+        public DateTime? EndDate { get; set; }
+
+        // Брой пътуващи
+        public int Travelers { get; set; } = 2;
+
+        // Информация за текущото време
         public string? WeatherInfo { get; set; }
-        public List<Destination> Destinations { get; set; } = new List<Destination>();
+
+        // Прогноза за периода на пътуването
+        public string? TripWeatherInfo { get; set; }
+
+        // Персонализиран AI пътеводител,
+        // включително маршрути по дни и часове
+        public string? AiRecommendation { get; set; }
 
         public string? TravelTypes { get; set; }
 
-        public string? AiRecommendation { get; set; }
+        public List<Destination> Destinations { get; set; } =
+            new List<Destination>();
     }
 }

@@ -54,7 +54,8 @@
                 </div>
             </div>
 
-            <form asp-controller="Trips" asp-action="Create" method="post">
+            <form id="createTripForm" asp-controller="Trips" asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
 
                 <div id="tripForm" class="trip-form-grid">
 
@@ -189,122 +190,193 @@
                         </div>
                     </div>
 
-                <button type="submit" class="trip-submit-button">
-                    ✨ Създай моето приключение
-                    <span>→</span>
-                </button>
+                    <button id="createTripButton" type="submit" class="trip-submit-button">
+                        ✨ Създай моето приключение
+                        <span>→</span>
+                    </button>
 
-                <p class="trip-form-note">
-                    Персонализирано пътуване, съобразено с твоите желания.
-                </p>
+                    <p id="createTripStatus" role="status" aria-live="polite" class="trip-form-note" hidden></p>
 
-            </form>
-        </div>
+                    <p class="trip-form-note">
+                        Персонализирано пътуване, съобразено с твоите желания.
+                    </p>
 
-    </section>
-
-
-    <!-- DESTINATIONS SECTION -->
-    <section class="destinations-section">
-
-        <div class="destinations-heading">
-            <div class="home-section-heading">
-                <span class="home-section-label">EXPLORE THE WORLD</span>
-                <h2>Открий следващата си дестинация</h2>
-                <p>
-                    Вдъхнови се от някои от най-красивите места по света.
-                </p>
+                </form>
             </div>
 
-            <a href="#plan-trip" class="view-all-link">
-                Планирай пътуване →
-            </a>
-        </div>
+        </section>
 
-        <div class="destination-grid">
 
-            <article class="destination-card">
-                <div class="destination-image">
-                    <img src="/images/rome.jpg"
-                         alt="Колизеумът в Рим" />
-                    <span class="destination-tag">История и култура</span>
+        <!-- DESTINATIONS SECTION -->
+        <section class="destinations-section">
+
+            <div class="destinations-heading">
+                <div class="home-section-heading">
+                    <span class="home-section-label">EXPLORE THE WORLD</span>
+                    <h2>Открий следващата си дестинация</h2>
+                    <p>
+                        Вдъхнови се от някои от най-красивите места по света.
+                    </p>
                 </div>
-                <div class="destination-info">
-                    <div>
-                        <h3>Рим, Италия</h3>
-                        <p>🏛️ История, архитектура и италианска кухня</p>
+
+                <a href="#plan-trip" class="view-all-link">
+                    Планирай пътуване →
+                </a>
+            </div>
+
+            <div class="destination-grid">
+
+                <article class="destination-card">
+                    <div class="destination-image">
+                        <img src="/images/rome.jpg"
+                             alt="Колизеумът в Рим" />
+                        <span class="destination-tag">История и култура</span>
                     </div>
-                    <a href="#plan-trip"
-                       class="destination-arrow"
-                       aria-label="Планирай пътуване до Рим">↗</a>
-                </div>
-            </article>
-
-            <article class="destination-card">
-                <div class="destination-image">
-                    <img src="/images/france.jpg"
-                         alt="Айфеловата кула в Париж" />
-                    <span class="destination-tag">Романтика</span>
-                </div>
-                <div class="destination-info">
-                    <div>
-                        <h3>Париж, Франция</h3>
-                        <p>🗼 Изкуство, уютни кафенета и романтика</p>
+                    <div class="destination-info">
+                        <div>
+                            <h3>Рим, Италия</h3>
+                            <p>🏛️ История, архитектура и италианска кухня</p>
+                        </div>
+                        <a href="#plan-trip"
+                           class="destination-arrow"
+                           aria-label="Планирай пътуване до Рим">↗</a>
                     </div>
-                    <a href="#plan-trip"
-                       class="destination-arrow"
-                       aria-label="Планирай пътуване до Париж">↗</a>
-                </div>
-            </article>
+                </article>
 
-            <article class="destination-card">
-                <div class="destination-image">
-                    <img src="/images/switzerland.jpg"
-                         alt="Планински пейзаж и северно сияние" />
-                    <span class="destination-tag">Природа</span>
-                </div>
-                <div class="destination-info">
-                    <div>
-                        <h3>Швейцария</h3>
-                        <p>🏔️ Планини, езера и впечатляващи гледки</p>
+                <article class="destination-card">
+                    <div class="destination-image">
+                        <img src="/images/france.jpg"
+                             alt="Айфеловата кула в Париж" />
+                        <span class="destination-tag">Романтика</span>
                     </div>
-                    <a href="#plan-trip"
-                       class="destination-arrow"
-                       aria-label="Планирай пътуване до Швейцария">↗</a>
-                </div>
-            </article>
+                    <div class="destination-info">
+                        <div>
+                            <h3>Париж, Франция</h3>
+                            <p>🗼 Изкуство, уютни кафенета и романтика</p>
+                        </div>
+                        <a href="#plan-trip"
+                           class="destination-arrow"
+                           aria-label="Планирай пътуване до Париж">↗</a>
+                    </div>
+                </article>
 
-        </div>
+                <article class="destination-card">
+                    <div class="destination-image">
+                        <img src="/images/switzerland.jpg"
+                             alt="Планински пейзаж и северно сияние" />
+                        <span class="destination-tag">Природа</span>
+                    </div>
+                    <div class="destination-info">
+                        <div>
+                            <h3>Швейцария</h3>
+                            <p>🏔️ Планини, езера и впечатляващи гледки</p>
+                        </div>
+                        <a href="#plan-trip"
+                           class="destination-arrow"
+                           aria-label="Планирай пътуване до Швейцария">↗</a>
+                    </div>
+                </article>
 
-    </section>
+            </div>
+
+        </section>
 
 
-    <!-- WHY SMART TRIP SECTION -->
-    <section class="why-smart-trip">
+        <!-- WHY SMART TRIP SECTION -->
+        <section class="why-smart-trip">
 
-        <div class="why-smart-trip-content">
-            <span class="home-section-label">TRAVEL SMARTER</span>
-            <h2>По-малко планиране.<br />Повече преживявания.</h2>
-            <p>
-                От избора на дестинация до последния детайл –
-                Smart TrIP ще ти помогне да организираш своето
-                следващо приключение на едно място.
-            </p>
+            <div class="why-smart-trip-content">
+                <span class="home-section-label">TRAVEL SMARTER</span>
+                <h2>По-малко планиране.<br />Повече преживявания.</h2>
+                <p>
+                    От избора на дестинация до последния детайл –
+                    Smart TrIP ще ти помогне да организираш своето
+                    следващо приключение на едно място.
+                </p>
 
-            <a asp-controller="Home"
-               asp-action="AboutUs"
-               class="home-secondary-button">
-                Научи повече за нас →
-            </a>
-        </div>
+                <a asp-controller="Home"
+                   asp-action="AboutUs"
+                   class="home-secondary-button">
+                    Научи повече за нас →
+                </a>
+            </div>
 
-        <div class="why-smart-trip-decoration">
-            <div class="decoration-circle">🌍</div>
-            <span class="decoration-star star-one">✦</span>
-            <span class="decoration-star star-two">✧</span>
-            <span class="decoration-plane">✈</span>
-        </div>
+            <div class="why-smart-trip-decoration">
+                <div class="decoration-circle">🌍</div>
+                <span class="decoration-star star-one">✦</span>
+                <span class="decoration-star star-two">✧</span>
+                <span class="decoration-plane">✈</span>
+            </div>
 
-    </section>
+        </section>
 
-</div>
+    </div>
+
+    <script>
+        (() => {
+            const form = document.getElementById('createTripForm');
+            const button = document.getElementById('createTripButton');
+            const status = document.getElementById('createTripStatus');
+            if (!form || !button || !status) return;
+
+            let submitting = false;
+            form.addEventListener('submit', async (event) => {
+                if (submitting) {
+                    event.preventDefault();
+                    return;
+                }
+                if (!form.checkValidity()) return;
+
+                const start = document.getElementById('startDate')?.value;
+                const end = document.getElementById('endDate')?.value;
+                if (start && end) {
+                    const days = Math.round((new Date(end + 'T12:00:00') - new Date(start + 'T12:00:00')) / 86400000) + 1;
+                    if (days < 1 || days > 14) {
+                        event.preventDefault();
+                        alert(days < 1 ? 'Крайната дата не може да е преди началната.' : 'Пътуването може да бъде най-много 14 дни.');
+                        return;
+                    }
+                }
+
+                event.preventDefault();
+                submitting = true;
+                button.disabled = true;
+                button.setAttribute('aria-busy', 'true');
+                button.textContent = '⏳ Генерираме твоето приключение...';
+                status.hidden = false;
+                status.textContent = 'Gemini подготвя маршрута. Това може да отнеме известно време. Не натискай повторно бутона.';
+
+                const slowMessage = setTimeout(() => {
+                    status.textContent = 'Още работим по маршрута. Моля, изчакай — не изпращай формата повторно.';
+                }, 30000);
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: new FormData(form),
+                        headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
+                        credentials: 'same-origin',
+                        cache: 'no-store'
+                    });
+                    const contentType = response.headers.get('content-type') || '';
+                    if (!contentType.includes('application/json')) {
+                        throw new Error('Сървърът върна неочакван отговор. Провери „Моите пътувания“, преди да опиташ отново.');
+                    }
+                    const result = await response.json();
+                    if (!response.ok || !result.success || !result.url) {
+                        throw new Error(result.message || 'Неуспешно създаване на пътуването.');
+                    }
+                    status.textContent = 'Пътуването е създадено! Отваряме маршрута...';
+                    window.location.assign(result.url);
+                } catch (error) {
+                    status.textContent = (error && error.message ? error.message : 'Възникна проблем.') + ' Провери „Моите пътувания“, преди да създаваш ново.';
+                    button.textContent = '✨ Създай моето приключение →';
+                    button.disabled = false;
+                    button.removeAttribute('aria-busy');
+                    submitting = false;
+                } finally {
+                    clearTimeout(slowMessage);
+                }
+            });
+        })();
+    </script>

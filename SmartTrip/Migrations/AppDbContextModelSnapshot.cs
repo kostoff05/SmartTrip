@@ -71,13 +71,25 @@ namespace SmartTrip.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Interests")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("StartDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("TravelType")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("TravelTypes")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Travelers")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("TripWeatherInfo")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("WeatherInfo")

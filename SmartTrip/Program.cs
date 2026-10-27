@@ -1,27 +1,47 @@
 using Microsoft.EntityFrameworkCore;
 using SmartTrip.Data;
+using SmartTrip.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// MVC
 builder.Services.AddControllersWithViews();
-// Казваме на приложението да ползва нашия AppDbContext и SQLite с връзката от appsettings.json
+
+// SQLite
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddHttpClient<SmartTrip.Services.WeatherService>();
-builder.Services.AddHttpClient<SmartTrip.Services.AiService>();
+    options.UseSqlite(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Кеширане
+builder.Services.AddMemoryCache();
+
+// Weather API
+builder.Services.AddHttpClient<WeatherService>();
+
+// Gemini AI
+builder.Services.AddHttpClient<AiService>();
+
+// OpenStreetMap
+builder.Services.AddHttpClient<OpenStreetMapService>(
+    client =>
+    {
+        client.DefaultRequestHeaders.UserAgent.ParseAdd(
+            "SmartTripUniversityProject/1.0 (contact: kostov2005@abv.bg)");
+
+        client.Timeout = TimeSpan.FromSeconds(60);
+    });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// HTTP pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
+
 app.UseRouting();
 
 app.UseAuthorization();
@@ -32,6 +52,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();

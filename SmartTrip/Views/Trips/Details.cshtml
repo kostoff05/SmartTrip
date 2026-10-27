@@ -1,120 +1,654 @@
 ﻿@model SmartTrip.Models.Trip
+@using SmartTrip.Services
+
+@{
+    ViewData["Title"] = "Пътуване до " + Model.City;
+
+    var restaurants =
+        ViewBag.Restaurants as List<Restaurant>
+        ?? new List<Restaurant>();
+
+    string currentWeather =
+        ViewBag.Weather as string
+        ?? Model.WeatherInfo
+        ?? "Няма информация";
+
+    string travelTypes =
+        !string.IsNullOrWhiteSpace(Model.TravelTypes)
+            ? Model.TravelTypes
+            : Model.TravelType ?? "Не е посочен";
+
+    int? totalDays = null;
+
+    if (Model.StartDate.HasValue && Model.EndDate.HasValue)
+    {
+        totalDays =
+            (Model.EndDate.Value.Date -
+             Model.StartDate.Value.Date).Days + 1;
+    }
+}
 
 <div class="container py-5">
-    <!-- Горна лента със заглавие и бутон за връщане -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <!-- ========================================= -->
+    <!-- 1. ЗАГЛАВИЕ -->
+    <!-- ========================================= -->
+
+    <div class="d-flex justify-content-between
+        align-items-center mb-4 flex-wrap gap-3">
+
         <div>
-            <h1 class="fw-bold text-dark mb-1">Детайли за пътуване: <span class="text-primary">@Model.City</span> 🌍</h1>
-            <p class="text-muted mb-0">Създадено на: @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</p>
+            <h1 class="fw-bold text-dark mb-2">
+                ✈️ Моето пътуване до
+                <span class="text-primary">
+                    @Model.City
+                </span>
+            </h1>
+
+            <p class="text-muted mb-2">
+                Създадено на:
+                @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")
+            </p>
+
+            @if (Model.StartDate.HasValue &&
+                 Model.EndDate.HasValue)
+            {
+                <div class="d-flex flex-wrap gap-2 mt-3">
+
+                    <span class="badge bg-primary fs-6 p-2">
+                        📅
+                        @Model.StartDate.Value.ToString("dd.MM.yyyy")
+                        –
+                        @Model.EndDate.Value.ToString("dd.MM.yyyy")
+                    </span>
+
+                    <span class="badge bg-success fs-6 p-2">
+                        🗓️ @totalDays дни
+                    </span>
+
+                    <span class="badge bg-info text-dark fs-6 p-2">
+                        👥 @Model.Travelers пътуващи
+                    </span>
+
+                </div>
+            }
         </div>
-        <div>
-            <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
-                ← Назад към списъка
-            </a>
-        </div>
+
+        <a asp-controller="Trips"
+           asp-action="Index"
+           class="btn btn-outline-secondary rounded-pill px-4">
+
+            ← Всички пътувания
+
+        </a>
+
     </div>
 
-    <!-- Информационни ленти / Карточки за бърз преглед -->
+
+    <!-- ========================================= -->
+    <!-- 2. ОСНОВНА ИНФОРМАЦИЯ -->
+    <!-- ========================================= -->
+
     <div class="row g-3 mb-4">
+
+        <!-- Бюджет -->
+
         <div class="col-md-4">
-            <div class="p-3 bg-white border-0 shadow-sm rounded-4 h-100 d-flex align-items-center">
-                <div class="fs-2 me-3">💰</div>
+
+            <div class="info-card shadow-sm rounded-4 p-4 h-100">
+
+                <div class="fs-2 mb-2">
+                    💶
+                </div>
+
+                <p class="text-muted mb-1">
+                    Общ бюджет
+                </p>
+
+                <h4 class="fw-bold mb-0">
+                    @Model.Budget €
+                </h4>
+
+            </div>
+
+        </div>
+
+
+        <!-- Текущо време -->
+
+        <div class="col-md-4">
+
+            <div class="info-card shadow-sm rounded-4 p-4 h-100">
+
+                <div class="fs-2 mb-2">
+                    🌤️
+                </div>
+
+                <p class="text-muted mb-1">
+                    Време в момента
+                </p>
+
+                <h5 id="current-weather" class="fw-bold text-success mb-0" aria-live="polite">
+                    @currentWeather
+                </h5>
+
+            </div>
+
+        </div>
+
+
+        <!-- Тип пътуване -->
+
+        <div class="col-md-4">
+
+            <div class="info-card shadow-sm rounded-4 p-4 h-100">
+
+                <div class="fs-2 mb-2">
+                    🎒
+                </div>
+
+                <p class="text-muted mb-1">
+                    Тип преживяване
+                </p>
+
+                <h5 class="fw-bold mb-0">
+                    @travelTypes
+                </h5>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- 3. ПРОГНОЗА ЗА ПЪТУВАНЕТО -->
+    <!-- ========================================= -->
+    @if (!string.IsNullOrWhiteSpace(Model.TripWeatherInfo))
+    {
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+            <div class="card-body p-4 p-md-5">
+
+                <h3 class="fw-bold mb-3">
+                    🌦️ Времето през твоето пътуване
+                </h3>
+
+                @if (Model.StartDate.HasValue &&
+                     Model.EndDate.HasValue)
+                {
+                    <p class="text-muted mb-3">
+
+                        Прогноза за периода:
+
+                        <strong>
+                            @Model.StartDate.Value.ToString("dd.MM.yyyy")
+                            –
+                            @Model.EndDate.Value.ToString("dd.MM.yyyy")
+                        </strong>
+
+                    </p>
+                }
+
+                <div class="weather-content">
+
+                    @Model.TripWeatherInfo
+
+                </div>
+
+                <div class="alert alert-info mt-4 mb-0">
+
+                    ℹ️ Прогнозата може да се промени.
+                    За по-далечни дати информацията
+                    може да бъде само ориентировъчна.
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+
+    <!-- ========================================= -->
+    <!-- 4. AI ПЪТЕВОДИТЕЛ -->
+    <!-- ========================================= -->
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+        <div class="card-body p-4 p-md-5">
+
+            <div class="d-flex align-items-center
+                gap-3 mb-4 pb-3 border-bottom">
+
+                <div class="ai-icon">
+                    🤖
+                </div>
+
                 <div>
-                    <small class="text-muted d-block">Бюджет</small>
-                    <span class="fw-bold fs-5 text-dark">@Model.Budget €</span>
+
+                    <h3 class="fw-bold mb-1">
+                        Твоят персонализиран AI пътеводител
+                    </h3>
+
+                    <p class="text-muted mb-0">
+
+                        Маршрут по дни и часове,
+                        бюджет и препоръки за багаж
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            @if (!string.IsNullOrWhiteSpace(
+                Model.AiRecommendation))
+            {
+                <div class="ai-content">
+
+                    @* ВАЖНО:
+                       Html.Raw показва HTML от Gemini.
+                       Преди публично внедряване
+                       съдържанието трябва да се
+                       филтрира с HTML sanitizer.
+                    *@
+
+                    @Html.Raw(Model.AiRecommendation)
+
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+
+                    Все още няма генериран
+                    AI пътеводител за това пътуване.
+
+                </div>
+            }
+
+
+            <div class="alert alert-light border mt-4 mb-0">
+
+                💡 <strong>Съвет:</strong>
+
+                Часовете в маршрута са предложения.
+                Провери работното време на
+                забележителностите и наличността
+                на билети преди посещението.
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- 5. РЕСТОРАНТИ ОТ OPENSTREETMAP -->
+    <!-- ========================================= -->
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+        <div class="card-body p-4 p-md-5">
+
+            <div class="d-flex align-items-center
+                gap-3 mb-4 pb-3 border-bottom">
+
+                <div class="restaurant-icon">
+                    🍽️
+                </div>
+
+                <div>
+
+                    <h3 class="fw-bold mb-1">
+                        Ресторанти в района
+                    </h3>
+
+                    <p class="text-muted mb-0">
+
+                        Реални картографски записи
+                        от OpenStreetMap
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div id="restaurants-container" aria-live="polite">
+                <div class="alert alert-info mb-0" role="status">
+                    <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                    Зареждаме ресторантите в района...
                 </div>
             </div>
+
+
+            <p class="text-muted small mt-4 mb-0">
+
+                Данни: © OpenStreetMap contributors.
+                Информацията може да не е актуална.
+
+            </p>
+
         </div>
-        <div class="col-md-4">
-            <div class="p-3 bg-white border-0 shadow-sm rounded-4 h-100 d-flex align-items-center">
-                <div class="fs-2 me-3">🌤️</div>
-                <div>
-                    <small class="text-muted d-block">Време</small>
-                    <span class="fw-bold fs-5 text-success">@Model.WeatherInfo</span>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="p-3 bg-white border-0 shadow-sm rounded-4 h-100 d-flex align-items-center">
-                <div class="fs-2 me-3">🎒</div>
-                <div>
-                    <small class="text-muted d-block">Тип преживяване</small>
-                    <span class="fw-semibold text-dark text-truncate d-inline-block" style="max-width: 200px;" title="@Model.TravelTypes">@Model.TravelTypes</span>
-                </div>
-            </div>
-        </div>
+
     </div>
 
-    <!-- Основна кутия с AI Пътеводителя -->
-    <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white mb-4">
-        <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
-            <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary me-3 fs-4">
-                ✨
+
+    <!-- ========================================= -->
+    <!-- 6. КАРТА НА ДЕСТИНАЦИЯТА -->
+    <!-- ========================================= -->
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+        <div class="card-body p-4 p-md-5">
+
+            <h3 class="fw-bold mb-3">
+
+                📍 Карта на @Model.City
+
+            </h3>
+
+            <p class="text-muted mb-4">
+
+                Разгледай района на дестинацията
+                и планирай придвижването си.
+
+            </p>
+
+            <div class="ratio ratio-16x9
+                rounded-4 overflow-hidden">
+
+                <iframe src="https://www.google.com/maps?q=@Uri.EscapeDataString(Model.City)&amp;z=13&amp;output=embed"
+                        title="Карта на @Model.City"
+                        style="border:0;"
+                        loading="lazy"
+                        allowfullscreen>
+                </iframe>
+
             </div>
-            <div>
-                <h3 class="fw-bold mb-0">Интелигентен пътеводител (AI)</h3>
-                <p class="text-muted mb-0">Персонализирани препоръки, забележителности и съвети за Вашия престой</p>
-            </div>
+
         </div>
 
-        <!-- Съдържанието от ИИ с подсилени стилове за списъците -->
-        <div class="ai-content text-secondary">
-            @Html.Raw(Model.AiRecommendation)
-        </div>
     </div>
 
-    <!-- СЕКЦИЯ: Google Maps Карта на дестинацията -->
-    <div class="card border-0 shadow-sm rounded-4 p-4 p-md-4 bg-white mb-4">
-        <div class="d-flex align-items-center mb-3">
-            <div class="fs-3 me-2">📍</div>
-            <h3 class="fw-bold mb-0">Карта на дестинацията: <span class="text-primary">@Model.City</span></h3>
-        </div>
-        <p class="text-muted mb-3">Интерактивно разглеждане на географското положение и ключовите точки в района.</p>
 
-        <div class="ratio ratio-16x9 rounded-4 overflow-hidden shadow-sm">
-            <iframe src="https://www.google.com/maps?q=@Uri.EscapeDataString(Model.City)&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                    width="100%"
-                    height="450"
-                    style="border:0;"
-                    allowfullscreen=""
-                    loading="lazy">
-            </iframe>
-        </div>
+    <!-- ========================================= -->
+    <!-- 7. БУТОНИ -->
+    <!-- ========================================= -->
+
+    <div class="d-flex justify-content-between
+        align-items-center flex-wrap gap-3">
+
+        <a asp-controller="Trips"
+           asp-action="Index"
+           class="btn btn-outline-primary rounded-pill px-4">
+
+            ← Назад към пътуванията
+
+        </a>
+
+        <a asp-controller="Trips"
+           asp-action="Delete"
+           asp-route-id="@Model.Id"
+           class="btn btn-outline-danger rounded-pill px-4">
+
+            🗑️ Изтрий пътуването
+
+        </a>
+
     </div>
 
-    <!-- Бутон за изтриване в дъното -->
-    <div class="text-end">
-        <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline" onsubmit="return confirm('Сигурни ли сте, че искате да изтриете това пътуване?');">
-            <button type="submit" class="btn btn-outline-danger rounded-pill px-4">
-                🗑️ Изтрий това пътуване
-            </button>
-        </form>
-    </div>
 </div>
 
+
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+        const weatherElement = document.getElementById("current-weather");
+        const restaurantsContainer = document.getElementById("restaurants-container");
+        const weatherUrl = '@Url.Action("CurrentWeather", "Trips", new { id = Model.Id })';
+        const restaurantsUrl = '@Url.Action("Restaurants", "Trips", new { id = Model.Id })';
+
+        async function fetchWithTimeout(url, timeoutMs = 25000) {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), timeoutMs);
+            try {
+                const response = await fetch(url, {
+                    signal: controller.signal,
+                    headers: { "Accept": "application/json" }
+                });
+                if (!response.ok) throw new Error("HTTP " + response.status);
+                return await response.json();
+            } finally {
+                clearTimeout(timeout);
+            }
+        }
+
+        async function loadWeather() {
+            try {
+                const result = await fetchWithTimeout(weatherUrl);
+                weatherElement.textContent = result.weather || "Няма налични данни за времето.";
+            } catch {
+                weatherElement.textContent = "Времето не е достъпно в момента.";
+            }
+        }
+
+        function showRestaurantsMessage(message) {
+            const alert = document.createElement("div");
+            alert.className = "alert alert-info mb-0";
+            alert.textContent = message;
+            restaurantsContainer.replaceChildren(alert);
+        }
+
+        function makeRestaurantCard(restaurant) {
+            const column = document.createElement("div");
+            column.className = "col-md-6 col-lg-4";
+
+            const card = document.createElement("div");
+            card.className = "restaurant-card rounded-4 p-4 h-100";
+
+            const icon = document.createElement("div");
+            icon.className = "fs-2 mb-3";
+            icon.textContent = "🍴";
+
+            const name = document.createElement("h5");
+            name.className = "fw-bold text-dark mb-2";
+            name.textContent = restaurant.name || "Ресторант";
+
+            const cuisine = document.createElement("p");
+            cuisine.className = "text-muted mb-3";
+            const label = document.createElement("strong");
+            label.textContent = "Кухня: ";
+            cuisine.append(label, document.createTextNode(restaurant.cuisine || "Не е посочена"));
+
+            card.append(icon, name, cuisine);
+
+            if (restaurant.mapUrl) {
+                try {
+                    const url = new URL(restaurant.mapUrl, window.location.origin);
+                    if (url.protocol === "https:" || url.protocol === "http:") {
+                        const link = document.createElement("a");
+                        link.href = url.href;
+                        link.target = "_blank";
+                        link.rel = "noopener noreferrer";
+                        link.className = "btn btn-outline-primary rounded-pill w-100 mt-auto";
+                        link.textContent = "📍 Виж на картата";
+                        card.append(link);
+                    }
+                } catch { /* Невалиден адрес на карта */ }
+            }
+
+            column.append(card);
+            return column;
+        }
+
+        async function loadRestaurants() {
+            try {
+                const result = await fetchWithTimeout(restaurantsUrl);
+                if (!result.success || !Array.isArray(result.restaurants) || result.restaurants.length === 0) {
+                    showRestaurantsMessage("В момента няма налични данни за ресторанти в тази дестинация.");
+                    return;
+                }
+
+                const row = document.createElement("div");
+                row.className = "row g-3";
+                for (const restaurant of result.restaurants) {
+                    row.append(makeRestaurantCard(restaurant));
+                }
+                restaurantsContainer.replaceChildren(row);
+            } catch {
+                showRestaurantsMessage("Ресторантите не могат да бъдат заредени в момента.");
+            }
+        }
+
+        // Двете заявки започват отделно и не блокират HTML страницата.
+        loadWeather();
+        loadRestaurants();
+    });
+</script>
+
+<!-- ========================================= -->
+<!-- 8. СТИЛОВЕ -->
+<!-- ========================================= -->
+
 <style>
-    /* Почистване и разкрасяване на HTML таговете, идващи от AI */
-    .ai-content h4 {
-        color: #212529;
-        font-weight: 700;
-        margin-top: 1.5rem;
-        margin-bottom: 1rem;
-        font-size: 1.25rem;
-        border-left: 4px solid #0d6efd;
-        padding-left: 10px;
+
+    .info-card {
+        background: white;
+        border: 1px solid #f0f0f0;
+        transition: transform 0.2s ease;
     }
 
-    .ai-content ul {
-        padding-left: 1.2rem;
-        margin-bottom: 1.5rem;
+        .info-card:hover {
+            transform: translateY(-3px);
+        }
+
+    .weather-content {
+        white-space: pre-line;
+        line-height: 1.8;
+        color: #495057;
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 25px;
     }
 
-    .ai-content li {
-        margin-bottom: 0.5rem;
-        line-height: 1.6;
+    .ai-icon {
+        background: #e8f0ff;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        flex-shrink: 0;
     }
 
-    .ai-content p {
-        line-height: 1.6;
+    .restaurant-icon {
+        background: #e8f8ee;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        flex-shrink: 0;
+    }
+
+    .ai-content {
+        line-height: 1.8;
+        color: #495057;
+    }
+
+        .ai-content h3 {
+            color: #212529;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .ai-content h4 {
+            color: #0d6efd;
+            font-weight: 700;
+            margin-top: 1.8rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #0d6efd;
+            padding-left: 12px;
+        }
+
+        .ai-content p {
+            margin-bottom: 1rem;
+        }
+
+        .ai-content ul {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .ai-content li {
+            margin-bottom: 0.6rem;
+        }
+
+        .ai-content .table-responsive {
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+
+        .ai-content table {
+            width: 100%;
+            margin-bottom: 0;
+        }
+
+        .ai-content th {
+            background: #e8f0ff;
+            color: #212529;
+            padding: 14px;
+            font-weight: 700;
+        }
+
+        .ai-content td {
+            padding: 14px;
+            vertical-align: top;
+        }
+
+        .ai-content tr:hover td {
+            background: #f8f9fa;
+        }
+
+    .restaurant-card {
+        background: #ffffff;
+        border: 1px solid #e9ecef;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .restaurant-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+    @@media (max-width: 768px) {
+
+        .ai-content table {
+            font-size: 14px;
+        }
+
+        .ai-content th,
+        .ai-content td {
+            padding: 10px;
+        }
+
+        .weather-content {
+            padding: 15px;
+        }
     }
 </style>
