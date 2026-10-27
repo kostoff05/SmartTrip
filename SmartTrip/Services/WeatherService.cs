@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿
+using System.Text.Json;
 
 namespace SmartTrip.Services
 {
@@ -9,81 +10,179 @@ namespace SmartTrip.Services
         public WeatherService(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _httpClient.Timeout = TimeSpan.FromSeconds(15);
         }
 
         public async Task<string> GetWeatherAsync(string city)
         {
-            if (string.IsNullOrEmpty(city)) return "Няма информация";
+            if (string.IsNullOrWhiteSpace(city))
+            {
+                return "Моля, въведете град.";
+            }
 
             try
             {
-                // Подаваме изписаното от потребителя име (на кирилица или латиница) директно към световната търсачка
                 string trimmedCity = city.Trim();
-                string geoUrl = $"https://geocoding-api.open-meteo.com/v1/search?name={Uri.EscapeDataString(trimmedCity)}&count=1&language=bg&format=json";
+
+                // 1. Търсим града по име.
+                string geoUrl =
+                    $"https://geocoding-api.open-meteo.com/v1/search" +
+                    $"?name={Uri.EscapeDataString(trimmedCity)}" +
+                    "&count=10&language=bg&format=json";
+
                 var geoResponse = await _httpClient.GetAsync(geoUrl);
 
-                if (!geoResponse.IsSuccessStatusCode) return "Грешка при връзка";
-
-                var geoJson = await geoResponse.Content.ReadAsStringAsync();
-                using var geoDoc = JsonDocument.Parse(geoJson);
-                var root = geoDoc.RootElement;
-
-                // Ако не намери резултат с български език, опитваме втори път без езиково ограничение (за по-добра разпознаваемост на чужди имена на кирилица)
-                if (!root.TryGetProperty("results", out var results) || results.GetArrayLength() == 0)
+                if (!geoResponse.IsSuccessStatusCode)
                 {
-                    string fallbackGeoUrl = $"https://geocoding-api.open-meteo.com/v1/search?name={Uri.EscapeDataString(trimmedCity)}&count=1&format=json";
-                    var fallbackResponse = await _httpClient.GetAsync(fallbackGeoUrl);
-                    if (!fallbackResponse.IsSuccessStatusCode) return $"Градът не е намерен";
-
-                    var fallbackJson = await fallbackResponse.Content.ReadAsStringAsync();
-                    using var fallbackDoc = JsonDocument.Parse(fallbackJson);
-                    root = fallbackDoc.RootElement;
-
-                    if (!root.TryGetProperty("results", out results) || results.GetArrayLength() == 0)
-                    {
-                        return $"Градът не е намерен";
-                    }
+                    return "Услугата за търсене на градове не отговаря.";
                 }
 
-                var location = results[0];
-                double lat = location.GetProperty("latitude").GetDouble();
-                double lon = location.GetProperty("longitude").GetDouble();
+                string geoJson = await geoResponse.Content.ReadAsStringAsync();
 
-                // Взимаме актуалната температура по получените географски координати
-                string weatherUrl = $"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,weather_code";
+                var coordinates = ParseCoordinates(geoJson);
+
+                // 2. Ако не намерим града, опитваме без езиков параметър.
+                if (coordinates == null)
+                {
+                    string fallbackUrl =
+                        $"https://geocoding-api.open-meteo.com/v1/search" +
+                        $"?name={Uri.EscapeDataString(trimmedCity)}" +
+                        "&count=10&format=json";
+
+                    var fallbackResponse =
+                        await _httpClient.GetAsync(fallbackUrl);
+
+                    if (!fallbackResponse.IsSuccessStatusCode)
+                    {
+                        return "Не успяхме да намерим града.";
+                    }
+
+                    string fallbackJson =
+                        await fallbackResponse.Content.ReadAsStringAsync();
+
+                    coordinates = ParseCoordinates(fallbackJson);
+                }
+
+                if (coordinates == null)
+                {
+                    return $"Градът „{trimmedCity}“ не е намерен.";
+                }
+
+                double latitude = coordinates.Value.Latitude;
+                double longitude = coordinates.Value.Longitude;
+
+                // 3. Извличаме актуалното време по координатите.
+                string weatherUrl =
+                    "https://api.open-meteo.com/v1/forecast" +
+                    $"?latitude={latitude.ToString(System.Globalization.CultureInfo.InvariantCulture)}" +
+                    $"&longitude={longitude.ToString(System.Globalization.CultureInfo.InvariantCulture)}" +
+                    "&current=temperature_2m,weather_code" +
+                    "&timezone=auto";
+
                 var weatherResponse = await _httpClient.GetAsync(weatherUrl);
 
-                if (!weatherResponse.IsSuccessStatusCode) return "Времето е недостъпно";
+                if (!weatherResponse.IsSuccessStatusCode)
+                {
+                    return "В момента няма достъп до информацията за времето.";
+                }
 
-                var weatherJson = await weatherResponse.Content.ReadAsStringAsync();
-                using var weatherDoc = JsonDocument.Parse(weatherJson);
-                var currentWeather = weatherDoc.RootElement.GetProperty("current");
+                string weatherJson =
+                    await weatherResponse.Content.ReadAsStringAsync();
 
-                double temp = currentWeather.GetProperty("temperature_2m").GetDouble();
-                int weatherCode = currentWeather.GetProperty("weather_code").GetInt32();
+                using var weatherDocument = JsonDocument.Parse(weatherJson);
 
-                string condition = GetWeatherDescription(weatherCode);
+                if (!weatherDocument.RootElement.TryGetProperty(
+                    "current", out var current))
+                {
+                    return "Не получихме данни за текущото време.";
+                }
 
-                return $"{condition}, {Math.Round(temp)}°C";
+                double temperature =
+                    current.GetProperty("temperature_2m").GetDouble();
+
+                int weatherCode =
+                    current.GetProperty("weather_code").GetInt32();
+
+                string description = GetWeatherDescription(weatherCode);
+
+                return $"{description}, {Math.Round(temperature)}°C";
             }
-            catch
+            catch (TaskCanceledException)
             {
-                return "Времето временно недостъпно";
+                return "Заявката за времето отне твърде много време.";
+            }
+            catch (HttpRequestException)
+            {
+                return "Няма връзка с услугата за времето.";
+            }
+            catch (JsonException)
+            {
+                return "Получените данни за времето са невалидни.";
+            }
+            catch (Exception)
+            {
+                return "Възникна грешка при зареждането на времето.";
             }
         }
 
-        private string GetWeatherDescription(int code)
+        private static (double Latitude, double Longitude)? ParseCoordinates(
+            string json)
+        {
+            using var document = JsonDocument.Parse(json);
+
+            if (!document.RootElement.TryGetProperty(
+                "results", out var results))
+            {
+                return null;
+            }
+
+            if (results.ValueKind != JsonValueKind.Array ||
+                results.GetArrayLength() == 0)
+            {
+                return null;
+            }
+
+            // Взимаме координатите, докато JSON документът е отворен.
+            var location = results[0];
+
+            if (!location.TryGetProperty("latitude", out var latitude) ||
+                !location.TryGetProperty("longitude", out var longitude))
+            {
+                return null;
+            }
+
+            return (
+                latitude.GetDouble(),
+                longitude.GetDouble()
+            );
+        }
+
+        private static string GetWeatherDescription(int code)
         {
             return code switch
             {
                 0 => "Ясно и слънчево",
-                1 or 2 or 3 => "Облачно",
+                1 => "Предимно ясно",
+                2 => "Променлива облачност",
+                3 => "Облачно",
                 45 or 48 => "Мъгла",
-                51 or 53 or 55 => "Слаб дъжд",
-                61 or 63 => "Дъжд",
-                71 or 73 or 75 => "Сняг",
-                95 or 96 or 99 => "Буря",
-                _ => "Променливо"
+                51 or 53 or 55 => "Ръмеж",
+                56 or 57 => "Леден ръмеж",
+                61 => "Слаб дъжд",
+                63 => "Умерен дъжд",
+                65 => "Силен дъжд",
+                66 or 67 => "Леден дъжд",
+                71 => "Слаб сняг",
+                73 => "Умерен сняг",
+                75 => "Силен сняг",
+                77 => "Снежни зърна",
+                80 => "Слаби превалявания",
+                81 => "Умерени превалявания",
+                82 => "Силни превалявания",
+                85 or 86 => "Снежни превалявания",
+                95 => "Гръмотевична буря",
+                96 or 99 => "Буря с градушка",
+                _ => "Променливо време"
             };
         }
     }
