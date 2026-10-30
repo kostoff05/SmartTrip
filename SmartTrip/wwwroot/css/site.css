@@ -2266,3 +2266,485 @@ body {
     }
 }
 
+/* =========================================
+   SMART TRIP - TRIP DETAILS PAGE
+========================================= */
+
+.trip-details-page {
+    max-width: 1250px;
+    color: #24434a;
+}
+
+/* ЗАГЛАВНА ЧАСТ */
+
+.trip-hero {
+    position: relative;
+    min-height: 420px;
+    margin-bottom: 35px;
+    border-radius: 25px;
+    overflow: hidden;
+    background-image: linear-gradient( 90deg, rgba(8, 32, 43, 0.88) 0%, rgba(8, 32, 43, 0.58) 55%, rgba(8, 32, 43, 0.12) 100% ), url("/images/travel-tours.jpg");
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 15px 40px rgba(14, 49, 58, 0.16);
+}
+
+.trip-hero-overlay {
+    min-height: 420px;
+    padding: 28px 38px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: white;
+}
+
+.trip-hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.trip-hero-label {
+    padding: 10px 16px;
+    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.trip-back-button {
+    color: white;
+    text-decoration: none;
+    padding: 11px 18px;
+    border: 1px solid rgba(255,255,255,0.45);
+    border-radius: 30px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    font-size: 13px;
+    transition: all 0.25s ease;
+}
+
+    .trip-back-button:hover {
+        color: #173e42;
+        background: white;
+        transform: translateY(-3px);
+    }
+
+.trip-hero-content {
+    max-width: 750px;
+    padding: 30px 0;
+}
+
+.trip-hero-subtitle {
+    color: #70e5d3;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+}
+
+.trip-hero-content h1 {
+    font-size: clamp(30px, 4vw, 48px);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -1px;
+    color: white;
+    margin-bottom: 15px;
+}
+
+    .trip-hero-content h1 span {
+        color: #70e5d3;
+    }
+
+.trip-hero-description {
+    color: rgba(255,255,255,0.8);
+    font-size: 14px;
+}
+
+.trip-hero-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+    .trip-hero-info span {
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.2);
+        backdrop-filter: blur(10px);
+        color: white;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+.trip-hero-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    color: rgba(255,255,255,0.65);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    .trip-hero,
+    .trip-hero-overlay {
+        min-height: 450px;
+    }
+
+    .trip-hero-overlay {
+        padding: 22px;
+    }
+
+    .trip-hero-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .trip-hero-content h1 {
+        font-size: 32px;
+    }
+
+    .trip-hero-info {
+        gap: 8px;
+    }
+
+        .trip-hero-info span {
+            font-size: 11px;
+        }
+
+    .trip-hero-footer {
+        font-size: 8px;
+    }
+}
+
+/* БУТОНИ */
+
+.trip-details-page .btn {
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+    .trip-details-page .btn:hover {
+        transform: translateY(-3px);
+    }
+
+.trip-details-page .btn-outline-primary {
+    color: #159b8b;
+    border-color: #20b8a5;
+}
+
+    .trip-details-page .btn-outline-primary:hover {
+        background: #20b8a5;
+        border-color: #20b8a5;
+        color: white;
+    }
+
+.trip-details-page .btn-outline-secondary:hover {
+    background: #173e42;
+    border-color: #173e42;
+}
+
+/* ИНФОРМАЦИОННИ КАРТИ */
+
+.info-card {
+    background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(219, 239, 255, 1) 52%, rgba(124, 188, 252, 1) 100%);
+    border: 1px solid #e7f0ef;
+    border-radius: 20px;
+    padding: 27px !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+    .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(23, 62, 66, 0.09) !important;
+    }
+
+    .info-card .fs-2 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 55px;
+        height: 55px;
+        background: #e6f8f4;
+        border-radius: 16px;
+        font-size: 27px !important;
+    }
+
+    .info-card h4,
+    .info-card h5 {
+        color: #173e42;
+    }
+
+    .info-card .text-success {
+        color: #159b8b !important;
+    }
+
+/* ОБЩИ КАРТИ */
+
+.trip-details-page .card {
+    background: #ffffff;
+    border: 1px solid #e8f0ef !important;
+    border-radius: 22px !important;
+    box-shadow: 0 8px 30px rgba(23, 62, 66, 0.055) !important;
+    overflow: hidden;
+}
+
+.trip-details-page .card-body {
+    padding: 32px !important;
+}
+
+.trip-details-page .card h3 {
+    color: #173e42;
+    font-size: 23px;
+    letter-spacing: -0.4px;
+}
+
+.trip-details-page .border-bottom {
+    border-color: #e8f0ef !important;
+}
+
+/* ПРОГНОЗА */
+
+.weather-content {
+    white-space: pre-line;
+    line-height: 1.9;
+    color: #526b6b;
+    background: linear-gradient(135deg, #f0faf9, #f5f9ff);
+    border: 1px solid #e2f0ed;
+    border-radius: 17px;
+    padding: 25px;
+}
+
+.weather-image {
+    height: 100%;
+    min-height: 280px;
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+    .weather-image img {
+        width: 100%;
+        height: 100%;
+        min-height: 280px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s ease;
+    }
+
+    .weather-image:hover img {
+        transform: scale(1.04);
+    }
+
+@media (max-width: 991px) {
+    .weather-image {
+        min-height: 220px;
+    }
+
+        .weather-image img {
+            min-height: 220px;
+        }
+}
+
+.trip-details-page .alert-info {
+    background: #edf8fc;
+    border: 1px solid #d7edf5;
+    color: #477687;
+    border-radius: 13px;
+    padding: 15px 18px;
+}
+
+/* AI ПЪТЕВОДИТЕЛ */
+
+.ai-icon,
+.restaurant-icon {
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 17px;
+    font-size: 27px;
+    flex-shrink: 0;
+}
+
+.ai-icon {
+    background: #e6f8f4;
+}
+
+.restaurant-icon {
+    background: #fff3e5;
+}
+
+.ai-content {
+    line-height: 1.9;
+    color: #526b6b;
+}
+
+    .ai-content h3 {
+        color: #173e42;
+        font-weight: 700;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .ai-content h4 {
+        color: #159b8b;
+        font-weight: 700;
+        margin-top: 1.8rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #20b8a5;
+        padding-left: 12px;
+    }
+
+    .ai-content p {
+        margin-bottom: 1rem;
+    }
+
+    .ai-content ul {
+        padding-left: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .ai-content li {
+        margin-bottom: 0.6rem;
+    }
+
+    .ai-content .table-responsive {
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+        border-radius: 13px;
+        overflow-x: auto;
+    }
+
+    .ai-content table {
+        width: 100%;
+        margin-bottom: 0;
+        border-collapse: collapse;
+    }
+
+    .ai-content th {
+        background: #e5f7f3;
+        color: #173e42;
+        padding: 14px;
+        font-weight: 700;
+    }
+
+    .ai-content td {
+        padding: 14px;
+        vertical-align: top;
+        border-bottom: 1px solid #edf2f1;
+    }
+
+    .ai-content tr:hover td {
+        background: #f7fbfa;
+    }
+
+/* РЕСТОРАНТИ */
+
+.restaurant-card {
+    background: #ffffff;
+    border: 1px solid #e5efed;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+    .restaurant-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 28px rgba(23, 62, 66, 0.09);
+    }
+
+    .restaurant-card h5 {
+        color: #173e42 !important;
+    }
+
+    .restaurant-card .btn {
+        margin-top: auto;
+    }
+
+/* КАРТА */
+
+.trip-details-page iframe {
+    border-radius: 16px;
+}
+
+/* ДОЛНА ЧАСТ */
+
+.trip-details-page > .d-flex:last-child {
+    padding: 20px 0 10px;
+    border-top: 1px solid #e8f0ef;
+}
+
+/* АНИМАЦИИ */
+
+@media (prefers-reduced-motion: reduce) {
+    .trip-details-page *,
+    .trip-details-page *::before,
+    .trip-details-page *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 768px) {
+
+    .trip-page-header {
+        padding: 23px 20px;
+    }
+
+    .trip-details-page .card-body {
+        padding: 22px !important;
+    }
+
+    .trip-details-page .card h3 {
+        font-size: 20px;
+    }
+
+    .info-card {
+        padding: 22px !important;
+    }
+
+    .weather-content {
+        padding: 17px;
+    }
+
+    .trip-details-page > .d-flex:last-child {
+        align-items: stretch;
+    }
+
+        .trip-details-page > .d-flex:last-child .btn {
+            width: 100%;
+        }
+}
+
+@media (max-width: 480px) {
+
+    .trip-page-header h1 {
+        font-size: 25px;
+    }
+
+    .trip-details-page .card-body {
+        padding: 18px !important;
+    }
+
+    .ai-icon,
+    .restaurant-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 23px;
+    }
+}

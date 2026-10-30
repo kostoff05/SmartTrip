@@ -28,51 +28,74 @@
     }
 }
 
-<div class="container py-5">
+<div class="container trip-details-page py-5">
 
     <!-- ========================================= -->
     <!-- 1. ЗАГЛАВИЕ -->
     <!-- ========================================= -->
+    <!-- HERO SECTION -->
 
-    <div class="d-flex justify-content-between
-        align-items-center mb-4 flex-wrap gap-3">
+    <section class="trip-hero">
 
-        <div>
-            <h1 class="fw-bold text-dark mb-2">
-                ✈️ Моето пътуване до
-                <span class="text-primary">
-                    @Model.City
+        <div class="trip-hero-overlay">
+
+            <div class="trip-hero-top">
+
+                <span class="trip-hero-label">
+                    ✦ YOUR NEXT ADVENTURE
                 </span>
-            </h1>
 
-            <p class="text-muted mb-2">
-                Създадено на:
-                @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")
-            </p>
+            </div>
 
-            @if (Model.StartDate.HasValue &&
-                 Model.EndDate.HasValue)
-            {
-                <div class="d-flex flex-wrap gap-2 mt-3">
+            <div class="trip-hero-content">
 
-                    <span class="badge bg-primary fs-6 p-2">
-                        📅
-                        @Model.StartDate.Value.ToString("dd.MM.yyyy")
-                        –
-                        @Model.EndDate.Value.ToString("dd.MM.yyyy")
-                    </span>
+                <p class="trip-hero-subtitle">
+                    ТВОЕТО СЛЕДВАЩО ПРИКЛЮЧЕНИЕ
+                </p>
 
-                    <span class="badge bg-success fs-6 p-2">
-                        🗓️ @totalDays дни
-                    </span>
+                <h1>
+                    Моето пътуване до
+                    <span>@Model.City</span>
+                </h1>
 
-                    <span class="badge bg-info text-dark fs-6 p-2">
-                        👥 @Model.Travelers пътуващи
-                    </span>
+                <p class="trip-hero-description">
+                    Създадено на:
+                    @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")
+                </p>
 
-                </div>
-            }
+                @if (Model.StartDate.HasValue &&
+                     Model.EndDate.HasValue)
+                {
+                    <div class="trip-hero-info">
+
+                        <span>
+                            📅
+                            @Model.StartDate.Value.ToString("dd.MM.yyyy")
+                            –
+                            @Model.EndDate.Value.ToString("dd.MM.yyyy")
+                        </span>
+
+                        <span>
+                            🗓️ @totalDays дни
+                        </span>
+
+                        <span>
+                            👥 @Model.Travelers пътуващи
+                        </span>
+
+                    </div>
+                }
+
+            </div>
+
+            <div class="trip-hero-footer">
+                <span>SMART TRIP</span>
+                <span>EXPLORE · DISCOVER · EXPERIENCE</span>
+            </div>
+
         </div>
+
+    </section>
 
         <a asp-controller="Trips"
            asp-action="Index"
@@ -81,8 +104,6 @@
             ← Всички пътувания
 
         </a>
-
-    </div>
 
 
     <!-- ========================================= -->
@@ -93,7 +114,7 @@
 
         <!-- Бюджет -->
 
-        <div class="col-md-4">
+        <div class="col-md-3">
 
             <div class="info-card shadow-sm rounded-4 p-4 h-100">
 
@@ -116,7 +137,7 @@
 
         <!-- Текущо време -->
 
-        <div class="col-md-4">
+        <div class="col-md-3">
 
             <div class="info-card shadow-sm rounded-4 p-4 h-100">
 
@@ -139,7 +160,7 @@
 
         <!-- Тип пътуване -->
 
-        <div class="col-md-4">
+        <div class="col-md-3">
 
             <div class="info-card shadow-sm rounded-4 p-4 h-100">
 
@@ -159,6 +180,33 @@
 
         </div>
 
+        <!-- Валута на дестинацията -->
+        <div class="col-md-3">
+
+            <div class="info-card shadow-sm rounded-4 p-4 h-100">
+
+                <div class="fs-2 mb-2">
+                    💱
+                </div>
+
+                <p class="text-muted mb-1">
+                    Валута на дестинацията
+                </p>
+
+                <h5 id="destination-currency"
+                    class="fw-bold text-success mb-1"
+                    aria-live="polite">
+                    Зареждане...
+                </h5>
+
+                <small id="destination-country"
+                       class="text-muted">
+                </small>
+
+            </div>
+
+        </div>
+
     </div>
 
 
@@ -171,15 +219,14 @@
 
             <div class="card-body p-4 p-md-5">
 
-                <h3 class="fw-bold mb-3">
+                <h3 class="fw-bold mb-4">
                     🌦️ Времето през твоето пътуване
                 </h3>
 
                 @if (Model.StartDate.HasValue &&
                      Model.EndDate.HasValue)
                 {
-                    <p class="text-muted mb-3">
-
+                    <p class="text-muted mb-4">
                         Прогноза за периода:
 
                         <strong>
@@ -187,22 +234,36 @@
                             –
                             @Model.EndDate.Value.ToString("dd.MM.yyyy")
                         </strong>
-
                     </p>
                 }
 
-                <div class="weather-content">
+                <div class="row g-4 align-items-center">
 
-                    @Model.TripWeatherInfo
+                    <!-- ТЕКСТ НА ПРОГНОЗАТА -->
+                    <div class="col-lg-7">
+
+                        <div class="weather-content">
+                            @Model.TripWeatherInfo
+                        </div>
+
+                    </div>
+
+                    <!-- СНИМКА -->
+                    <div class="col-lg-5">
+
+                        <div class="weather-image">
+                            <img src="~/images/weather.jpg"
+                                 alt="Пейзаж с красиво време по време на пътуване" />
+                        </div>
+
+                    </div>
 
                 </div>
 
                 <div class="alert alert-info mt-4 mb-0">
-
                     ℹ️ Прогнозата може да се промени.
                     За по-далечни дати информацията
                     може да бъде само ориентировъчна.
-
                 </div>
 
             </div>
@@ -406,15 +467,14 @@
 
 </div>
 
-
 <script>
-        document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
         const weatherElement = document.getElementById("current-weather");
         const restaurantsContainer = document.getElementById("restaurants-container");
         const weatherUrl = '@Url.Action("CurrentWeather", "Trips", new { id = Model.Id })';
         const restaurantsUrl = '@Url.Action("Restaurants", "Trips", new { id = Model.Id })';
 
-        async function fetchWithTimeout(url, timeoutMs = 25000) {
+        async function fetchWithTimeout(url, timeoutMs = 60000) {
             const controller = new AbortController();
             const timeout = setTimeout(() => controller.abort(), timeoutMs);
             try {
@@ -490,165 +550,85 @@
         async function loadRestaurants() {
             try {
                 const result = await fetchWithTimeout(restaurantsUrl);
-                if (!result.success || !Array.isArray(result.restaurants) || result.restaurants.length === 0) {
-                    showRestaurantsMessage("В момента няма налични данни за ресторанти в тази дестинация.");
+
+                console.log("Ресторанти - резултат:", result);
+
+                if (!result.success ||
+                    !Array.isArray(result.restaurants) ||
+                    result.restaurants.length === 0) {
+
+                    showRestaurantsMessage(
+                        "В момента няма налични данни за ресторанти в тази дестинация."
+                    );
                     return;
                 }
 
                 const row = document.createElement("div");
                 row.className = "row g-3";
+
                 for (const restaurant of result.restaurants) {
                     row.append(makeRestaurantCard(restaurant));
                 }
+
                 restaurantsContainer.replaceChildren(row);
-            } catch {
-                showRestaurantsMessage("Ресторантите не могат да бъдат заредени в момента.");
+
+            } catch (error) {
+                console.error("Грешка при ресторантите:", error);
+
+                showRestaurantsMessage(
+                    "Ресторантите не могат да бъдат заредени в момента."
+                );
             }
         }
-
         // Двете заявки започват отделно и не блокират HTML страницата.
         loadWeather();
         loadRestaurants();
     });
+
+
+    document.addEventListener("DOMContentLoaded", async function () {
+
+        const currencyElement =
+            document.getElementById("destination-currency");
+
+        const countryElement =
+            document.getElementById("destination-country");
+
+        try {
+            const response = await fetch(
+                `/Trips/DestinationCurrency?id=@Model.Id`
+            );
+
+            if (!response.ok) {
+                throw new Error("Грешка при заявката");
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+
+                currencyElement.textContent =
+                    `${data.currencyName} (${data.currencyCode}) ${data.symbol}`;
+
+                countryElement.textContent =
+                    `Държава: ${data.country}`;
+
+            } else {
+
+                currencyElement.textContent =
+                    "Няма налична информация";
+
+            }
+
+        } catch (error) {
+
+            console.error("Грешка при валутата:", error);
+
+            currencyElement.textContent =
+                "Валутата не може да бъде заредена";
+
+        }
+
+    });
+
 </script>
-
-<!-- ========================================= -->
-<!-- 8. СТИЛОВЕ -->
-<!-- ========================================= -->
-
-<style>
-
-    .info-card {
-        background: white;
-        border: 1px solid #f0f0f0;
-        transition: transform 0.2s ease;
-    }
-
-        .info-card:hover {
-            transform: translateY(-3px);
-        }
-
-    .weather-content {
-        white-space: pre-line;
-        line-height: 1.8;
-        color: #495057;
-        background: #f8f9fa;
-        border-radius: 15px;
-        padding: 25px;
-    }
-
-    .ai-icon {
-        background: #e8f0ff;
-        border-radius: 50%;
-        width: 60px;
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 28px;
-        flex-shrink: 0;
-    }
-
-    .restaurant-icon {
-        background: #e8f8ee;
-        border-radius: 50%;
-        width: 60px;
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 28px;
-        flex-shrink: 0;
-    }
-
-    .ai-content {
-        line-height: 1.8;
-        color: #495057;
-    }
-
-        .ai-content h3 {
-            color: #212529;
-            font-weight: 700;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .ai-content h4 {
-            color: #0d6efd;
-            font-weight: 700;
-            margin-top: 1.8rem;
-            margin-bottom: 1rem;
-            border-left: 4px solid #0d6efd;
-            padding-left: 12px;
-        }
-
-        .ai-content p {
-            margin-bottom: 1rem;
-        }
-
-        .ai-content ul {
-            padding-left: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .ai-content li {
-            margin-bottom: 0.6rem;
-        }
-
-        .ai-content .table-responsive {
-            margin-top: 1rem;
-            margin-bottom: 2rem;
-            border-radius: 12px;
-            overflow-x: auto;
-        }
-
-        .ai-content table {
-            width: 100%;
-            margin-bottom: 0;
-        }
-
-        .ai-content th {
-            background: #e8f0ff;
-            color: #212529;
-            padding: 14px;
-            font-weight: 700;
-        }
-
-        .ai-content td {
-            padding: 14px;
-            vertical-align: top;
-        }
-
-        .ai-content tr:hover td {
-            background: #f8f9fa;
-        }
-
-    .restaurant-card {
-        background: #ffffff;
-        border: 1px solid #e9ecef;
-        display: flex;
-        flex-direction: column;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-        .restaurant-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-        }
-
-    @@media (max-width: 768px) {
-
-        .ai-content table {
-            font-size: 14px;
-        }
-
-        .ai-content th,
-        .ai-content td {
-            padding: 10px;
-        }
-
-        .weather-content {
-            padding: 15px;
-        }
-    }
-</style>

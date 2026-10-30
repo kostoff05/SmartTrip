@@ -12,17 +12,20 @@ namespace SmartTrip.Controllers
         private readonly WeatherService _weatherService;
         private readonly AiService _aiService;
         private readonly OpenStreetMapService _mapService;
+        private readonly CurrencyService _currencyService;
 
         public TripsController(
             AppDbContext context,
             WeatherService weatherService,
             AiService aiService,
-            OpenStreetMapService mapService)
+            OpenStreetMapService mapService,
+            CurrencyService currencyService)
         {
             _context = context;
             _weatherService = weatherService;
             _aiService = aiService;
             _mapService = mapService;
+            _currencyService = currencyService;
         }
 
         // ==========================================
@@ -107,6 +110,42 @@ namespace SmartTrip.Controllers
                     weather = "Няма налични данни за времето."
                 });
             }
+        }
+
+        // ==========================================
+        // ВАЛУТА НА ДЕСТИНАЦИЯТА
+        // ==========================================
+
+        [HttpGet]
+        public async Task<IActionResult> DestinationCurrency(int id)
+        {
+            var trip = await _context.Trips
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (trip == null)
+                return NotFound();
+
+            var currency = await _currencyService
+                .GetCurrencyAsync(trip.City);
+
+            if (currency == null)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Не успяхме да намерим валутата на дестинацията."
+                });
+            }
+
+            return Json(new
+            {
+                success = true,
+                country = currency.CountryName,
+                currencyName = currency.CurrencyName,
+                currencyCode = currency.CurrencyCode,
+                symbol = currency.Symbol
+            });
         }
 
         // ==========================================

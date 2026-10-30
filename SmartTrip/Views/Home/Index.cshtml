@@ -103,6 +103,7 @@
                                    id="destination"
                                    name="destination"
                                    placeholder="Например: Рим, Италия"
+                                   value="@Context.Request.Query["destination"]"
                                    required />
                         </div>
                     </div>
@@ -273,7 +274,7 @@
                             <h3>Рим, Италия</h3>
                             <p>🏛️ История, архитектура и италианска кухня</p>
                         </div>
-                        <a href="#plan-trip"
+                        <a href="@Url.Action("Index", "Home", new { destination = "Италия" })#plan-trip"
                            class="destination-arrow"
                            aria-label="Планирай пътуване до Рим">↗</a>
                     </div>
@@ -290,7 +291,7 @@
                             <h3>Париж, Франция</h3>
                             <p>🗼 Изкуство, уютни кафенета и романтика</p>
                         </div>
-                        <a href="#plan-trip"
+                        <a href="@Url.Action("Index", "Home", new { destination = "Париж"})#plan-trip"
                            class="destination-arrow"
                            aria-label="Планирай пътуване до Париж">↗</a>
                     </div>
@@ -307,7 +308,7 @@
                             <h3>Швейцария</h3>
                             <p>🏔️ Планини, езера и впечатляващи гледки</p>
                         </div>
-                        <a href="#plan-trip"
+                        <a href="@Url.Action("Index", "Home", new { destination = "Швейцария"})#plan-trip"
                            class="destination-arrow"
                            aria-label="Планирай пътуване до Швейцария">↗</a>
                     </div>

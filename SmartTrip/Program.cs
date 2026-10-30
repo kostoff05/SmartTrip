@@ -18,6 +18,15 @@ builder.Services.AddMemoryCache();
 // Weather API
 builder.Services.AddHttpClient<WeatherService>();
 
+// Currency API
+builder.Services.AddHttpClient<CurrencyService>(client =>
+{
+    client.DefaultRequestHeaders.UserAgent.ParseAdd(
+        "SmartTripUniversityProject/1.0");
+
+    client.Timeout = TimeSpan.FromSeconds(20);
+});
+
 // Gemini AI
 builder.Services.AddHttpClient<AiService>();
 
