@@ -21,6 +21,12 @@ namespace SmartTrip.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Technologies()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

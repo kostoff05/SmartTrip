@@ -11,20 +11,20 @@ namespace SmartTrip.Controllers
         private readonly AppDbContext _context;
         private readonly WeatherService _weatherService;
         private readonly AiService _aiService;
-        private readonly OpenStreetMapService _mapService;
+     
         private readonly CurrencyService _currencyService;
 
         public TripsController(
             AppDbContext context,
             WeatherService weatherService,
             AiService aiService,
-            OpenStreetMapService mapService,
+
             CurrencyService currencyService)
         {
             _context = context;
             _weatherService = weatherService;
             _aiService = aiService;
-            _mapService = mapService;
+    
             _currencyService = currencyService;
         }
 
@@ -70,7 +70,6 @@ namespace SmartTrip.Controllers
 
             ViewBag.TripWeather = trip.TripWeatherInfo;
 
-            ViewBag.Restaurants = new List<Restaurant>();
 
             return View(trip);
         }
@@ -147,51 +146,7 @@ namespace SmartTrip.Controllers
                 symbol = currency.Symbol
             });
         }
-
-        // ==========================================
-        // 4. РЕСТОРАНТИ - ОТДЕЛНА ЗАЯВКА
-        // ==========================================
-
-        [HttpGet]
-        public async Task<IActionResult> Restaurants(int id)
-        {
-            var trip = await _context.Trips
-                .AsNoTracking()
-                .FirstOrDefaultAsync(t => t.Id == id);
-
-            if (trip == null)
-            {
-                return NotFound();
-            }
-
-            try
-            {
-                var restaurants = await _mapService
-                    .GetRestaurantsAsync(trip.City);
-
-                return Json(new
-                {
-                    success = true,
-                    restaurants = restaurants
-                        .Take(6)
-                        .Select(r => new
-                        {
-                            name = r.Name,
-                            cuisine = r.Cuisine,
-                            mapUrl = r.MapUrl
-                        })
-                        .ToList()
-                });
-            }
-            catch
-            {
-                return Json(new
-                {
-                    success = false,
-                    restaurants = Array.Empty<object>()
-                });
-            }
-        }
+        
 
         // ==========================================
         // 5. СЪЗДАВАНЕ - GET
@@ -453,7 +408,7 @@ namespace SmartTrip.Controllers
         // ==========================================
 
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]  
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var trip = await _context.Trips.FindAsync(id);

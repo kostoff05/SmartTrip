@@ -1,12 +1,8 @@
 ﻿@model SmartTrip.Models.Trip
-@using SmartTrip.Services
 
 @{
     ViewData["Title"] = "Пътуване до " + Model.City;
 
-    var restaurants =
-        ViewBag.Restaurants as List<Restaurant>
-        ?? new List<Restaurant>();
 
     string currentWeather =
         ViewBag.Weather as string
@@ -97,13 +93,13 @@
 
     </section>
 
-        <a asp-controller="Trips"
-           asp-action="Index"
-           class="btn btn-outline-secondary rounded-pill px-4">
+    <a asp-controller="Trips"
+       asp-action="Index"
+       class="btn btn-outline-secondary rounded-pill px-4">
 
-            ← Всички пътувания
+        ← Всички пътувания
 
-        </a>
+    </a>
 
 
     <!-- ========================================= -->
@@ -348,61 +344,10 @@
     </div>
 
 
-    <!-- ========================================= -->
-    <!-- 5. РЕСТОРАНТИ ОТ OPENSTREETMAP -->
-    <!-- ========================================= -->
-
-    <div class="card border-0 shadow-sm rounded-4 mb-4">
-
-        <div class="card-body p-4 p-md-5">
-
-            <div class="d-flex align-items-center
-                gap-3 mb-4 pb-3 border-bottom">
-
-                <div class="restaurant-icon">
-                    🍽️
-                </div>
-
-                <div>
-
-                    <h3 class="fw-bold mb-1">
-                        Ресторанти в района
-                    </h3>
-
-                    <p class="text-muted mb-0">
-
-                        Реални картографски записи
-                        от OpenStreetMap
-
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div id="restaurants-container" aria-live="polite">
-                <div class="alert alert-info mb-0" role="status">
-                    <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
-                    Зареждаме ресторантите в района...
-                </div>
-            </div>
-
-
-            <p class="text-muted small mt-4 mb-0">
-
-                Данни: © OpenStreetMap contributors.
-                Информацията може да не е актуална.
-
-            </p>
-
-        </div>
-
-    </div>
 
 
     <!-- ========================================= -->
-    <!-- 6. КАРТА НА ДЕСТИНАЦИЯТА -->
+    <!-- 5. КАРТА НА ДЕСТИНАЦИЯТА -->
     <!-- ========================================= -->
 
     <div class="card border-0 shadow-sm rounded-4 mb-4">
@@ -440,7 +385,7 @@
 
 
     <!-- ========================================= -->
-    <!-- 7. БУТОНИ -->
+    <!-- 6. БУТОНИ -->
     <!-- ========================================= -->
 
     <div class="d-flex justify-content-between
@@ -468,11 +413,10 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         const weatherElement = document.getElementById("current-weather");
-        const restaurantsContainer = document.getElementById("restaurants-container");
+
         const weatherUrl = '@Url.Action("CurrentWeather", "Trips", new { id = Model.Id })';
-        const restaurantsUrl = '@Url.Action("Restaurants", "Trips", new { id = Model.Id })';
 
         async function fetchWithTimeout(url, timeoutMs = 60000) {
             const controller = new AbortController();
@@ -498,95 +442,14 @@
             }
         }
 
-        function showRestaurantsMessage(message) {
-            const alert = document.createElement("div");
-            alert.className = "alert alert-info mb-0";
-            alert.textContent = message;
-            restaurantsContainer.replaceChildren(alert);
-        }
 
-        function makeRestaurantCard(restaurant) {
-            const column = document.createElement("div");
-            column.className = "col-md-6 col-lg-4";
-
-            const card = document.createElement("div");
-            card.className = "restaurant-card rounded-4 p-4 h-100";
-
-            const icon = document.createElement("div");
-            icon.className = "fs-2 mb-3";
-            icon.textContent = "🍴";
-
-            const name = document.createElement("h5");
-            name.className = "fw-bold text-dark mb-2";
-            name.textContent = restaurant.name || "Ресторант";
-
-            const cuisine = document.createElement("p");
-            cuisine.className = "text-muted mb-3";
-            const label = document.createElement("strong");
-            label.textContent = "Кухня: ";
-            cuisine.append(label, document.createTextNode(restaurant.cuisine || "Не е посочена"));
-
-            card.append(icon, name, cuisine);
-
-            if (restaurant.mapUrl) {
-                try {
-                    const url = new URL(restaurant.mapUrl, window.location.origin);
-                    if (url.protocol === "https:" || url.protocol === "http:") {
-                        const link = document.createElement("a");
-                        link.href = url.href;
-                        link.target = "_blank";
-                        link.rel = "noopener noreferrer";
-                        link.className = "btn btn-outline-primary rounded-pill w-100 mt-auto";
-                        link.textContent = "📍 Виж на картата";
-                        card.append(link);
-                    }
-                } catch { /* Невалиден адрес на карта */ }
-            }
-
-            column.append(card);
-            return column;
-        }
-
-        async function loadRestaurants() {
-            try {
-                const result = await fetchWithTimeout(restaurantsUrl);
-
-                console.log("Ресторанти - резултат:", result);
-
-                if (!result.success ||
-                    !Array.isArray(result.restaurants) ||
-                    result.restaurants.length === 0) {
-
-                    showRestaurantsMessage(
-                        "В момента няма налични данни за ресторанти в тази дестинация."
-                    );
-                    return;
-                }
-
-                const row = document.createElement("div");
-                row.className = "row g-3";
-
-                for (const restaurant of result.restaurants) {
-                    row.append(makeRestaurantCard(restaurant));
-                }
-
-                restaurantsContainer.replaceChildren(row);
-
-            } catch (error) {
-                console.error("Грешка при ресторантите:", error);
-
-                showRestaurantsMessage(
-                    "Ресторантите не могат да бъдат заредени в момента."
-                );
-            }
-        }
-        // Двете заявки започват отделно и не блокират HTML страницата.
+        
+        // Зареждаме времето асинхронно, без да блокираме HTML страницата.
         loadWeather();
-        loadRestaurants();
     });
 
 
-    document.addEventListener("DOMContentLoaded", async function () {
+    document.addEventListener("DOMContentLoaded", async function() {
 
         const currencyElement =
             document.getElementById("destination-currency");

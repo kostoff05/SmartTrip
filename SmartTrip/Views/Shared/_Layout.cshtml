@@ -3,13 +3,34 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>@ViewData["Title"] - SmartTrIP</title>
+
+    <link rel="icon"
+          type="image/png"
+          href="~/images/airplane.png"
+          asp-append-version="true" />
+
     <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/SmartTrip.styles.css" asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/SmartTrip.styles.css"
+          asp-append-version="true" />
 </head>
+
 <body>
+
+    <!-- ========================================= -->
+    <!-- NAVBAR - ЗАПАЗВАМЕ СЕГАШНИЯ ДИЗАЙН -->
+    <!-- ========================================= -->
+
     <header class="site-header">
         <nav class="navbar navbar-expand-lg smart-navbar">
             <div class="container">
@@ -18,8 +39,13 @@
                 <a class="navbar-brand smart-brand"
                    asp-controller="Home"
                    asp-action="Index">
+
                     <span class="brand-icon">✈</span>
-                    <span>Smart <strong>TrIP</strong></span>
+
+                    <span>
+                        Smart <strong>TrIP</strong>
+                    </span>
+
                 </a>
 
                 <!-- Mobile menu button -->
@@ -30,27 +56,47 @@
                         aria-controls="smartNavbar"
                         aria-expanded="false"
                         aria-label="Отвори менюто">
+
                     <span class="navbar-toggler-icon"></span>
+
                 </button>
 
                 <!-- Navigation links -->
-                <div class="collapse navbar-collapse" id="smartNavbar">
+                <div class="collapse navbar-collapse"
+                     id="smartNavbar">
+
                     <ul class="navbar-nav ms-auto align-items-lg-center">
 
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index"> Начало</a>
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="Index">
+                                Начало
+                            </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Trips" asp-action="Index"> Моите пътувания</a>
+                            <a class="nav-link"
+                               asp-controller="Trips"
+                               asp-action="Index">
+                                Моите пътувания
+                            </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="AboutUs"> За нас</a>
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="AboutUs">
+                                За нас
+                            </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Technologies"> Технологии</a>
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="Technologies">
+                                Технологии
+                            </a>
                         </li>
 
                         <li class="nav-item nav-cta-item">
@@ -58,7 +104,9 @@
                                asp-controller="Home"
                                asp-action="Index"
                                asp-fragment="plan-trip">
+
                                 <span>+</span> Ново пътуване
+
                             </a>
                         </li>
 
@@ -68,20 +116,185 @@
             </div>
         </nav>
     </header>
-    
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    
 
-    <footer class="border-top footer text-muted">
+
+    <!-- ========================================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ========================================= -->
+
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+
+
+    <!-- ========================================= -->
+    <!-- NEW SMARTTRIP FOOTER -->
+    <!-- ========================================= -->
+
+    <footer class="smart-footer">
+
         <div class="container">
-            &copy; 2026 - SmartTrip - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+            <div class="row g-5">
+
+                <!-- ЛЯВА КОЛОНА: БРАНД -->
+
+                <div class="col-lg-5 col-md-12">
+
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       class="footer-brand">
+
+                        <span class="footer-brand-icon">
+                            ✈
+                        </span>
+
+                        <span>
+                            Smart <strong>TrIP</strong>
+                        </span>
+
+                    </a>
+
+                    <p class="footer-description">
+
+                        Планирай умно. Откривай повече.
+
+                        <br /><br />
+
+                        Твоят персонален помощник за
+                        незабравими пътешествия.
+                        Създавай маршрути, откривай
+                        нови дестинации и превръщай
+                        всяко пътуване в приключение.
+
+                    </p>
+
+                    <div class="footer-tagline">
+
+                        🌍 Светът те очаква!
+
+                    </div>
+
+                </div>
+
+
+                <!-- СРЕДНА КОЛОНА: НАВИГАЦИЯ -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <h5 class="footer-heading">
+                        Бързи връзки
+                    </h5>
+
+                    <ul class="footer-links">
+
+                        <li>
+                            <a asp-controller="Home"
+                               asp-action="Index">
+                                Начало
+                            </a>
+                        </li>
+
+                        <li>
+                            <a asp-controller="Trips"
+                               asp-action="Index">
+                                Моите пътувания
+                            </a>
+                        </li>
+
+                        <li>
+                            <a asp-controller="Home"
+                               asp-action="AboutUs">
+                                За нас
+                            </a>
+                        </li>
+
+                        <li>
+                            <a asp-controller="Home"
+                               asp-action="Technologies">
+                                Технологии
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <!-- ДЯСНА КОЛОНА: НОВО ПЪТУВАНЕ -->
+
+                <div class="col-lg-4 col-md-6">
+
+                    <h5 class="footer-heading">
+                        Готов за ново приключение?
+                    </h5>
+
+                    <p class="footer-adventure-text">
+
+                        Следващата ти любима дестинация
+                        е само на няколко клика разстояние.
+
+                    </p>
+
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       asp-fragment="plan-trip"
+                       class="footer-cta">
+
+                        ✨ Планирай пътуване
+
+                        <span>→</span>
+
+                    </a>
+
+                    <p class="footer-small-text">
+
+                        ✈️ Твоето пътуване започва тук.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ДОЛНА ЧАСТ -->
+
+            <div class="footer-bottom">
+
+                <p class="mb-0">
+
+                    © @DateTime.Now.Year SmartTrIP.
+                    Всички права запазени.
+
+                </p>
+
+                <p class="mb-0">
+
+                    Създадено с
+                    <span class="footer-heart">♥</span>
+                    за любителите на пътешествията.
+
+                </p>
+
+            </div>
+
         </div>
+
     </footer>
+
+
+    <!-- ========================================= -->
+    <!-- SCRIPTS -->
+    <!-- ========================================= -->
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

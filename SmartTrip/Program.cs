@@ -30,15 +30,7 @@ builder.Services.AddHttpClient<CurrencyService>(client =>
 // Gemini AI
 builder.Services.AddHttpClient<AiService>();
 
-// OpenStreetMap
-builder.Services.AddHttpClient<OpenStreetMapService>(
-    client =>
-    {
-        client.DefaultRequestHeaders.UserAgent.ParseAdd(
-            "SmartTripUniversityProject/1.0 (contact: kostov2005@abv.bg)");
 
-        client.Timeout = TimeSpan.FromSeconds(60);
-    });
 
 var app = builder.Build();
 
