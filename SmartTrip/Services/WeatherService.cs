@@ -56,6 +56,11 @@ namespace SmartTrip.Services
 
                 if (!response.IsSuccessStatusCode)
                 {
+                    _logger.LogWarning(
+                        "Open-Meteo Current Weather API върна HTTP {StatusCode} за град {City}",
+                        (int)response.StatusCode,
+                        city);
+
                     return "В момента няма достъп до информацията за времето.";
                 }
 
