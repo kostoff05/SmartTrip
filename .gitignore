@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/SmartTrip/smarttrip.db
+/SmartTrip/smarttrip.db-wal
+/SmartTrip/smarttrip.db-shm
