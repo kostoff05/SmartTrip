@@ -9,8 +9,8 @@ namespace SmartTrip.Data
         {
         }
 
-        // Създаваме таблиците в базата данни за нашите модели
-        public DbSet<Trip> Trips { get; set; } // Тук се създава таблица Trips
-        public DbSet<Destination> Destinations { get; set; } // Тук се създава таблица Destinations
+        // Таблиците в базата данни за нашите модели
+        public DbSet<Trip> Trips { get; set; } 
+        public DbSet<Destination> Destinations { get; set; } 
     }
 }

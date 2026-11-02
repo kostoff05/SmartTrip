@@ -20,12 +20,8 @@ namespace SmartTrip.Services
 
             _httpClient.Timeout = TimeSpan.FromSeconds(15);
         }
-
-        // =====================================================
         // 1. ТЕКУЩО ВРЕМЕ
         // Запазваме метода за съществуващите страници
-        // =====================================================
-
         public async Task<string> GetWeatherAsync(string city)
         {
             if (string.IsNullOrWhiteSpace(city))
@@ -97,11 +93,7 @@ namespace SmartTrip.Services
                 return "Възникна грешка при зареждането на времето.";
             }
         }
-
-        // =====================================================
         // 2. ПРОГНОЗА ЗА ПЕРИОДА НА ПЪТУВАНЕТО
-        // =====================================================
-
         public async Task<string> GetTripWeatherAsync(
             string city,
             DateTime startDate,
@@ -292,11 +284,7 @@ namespace SmartTrip.Services
                     $"Температурен диапазон: " +
                     $"{Math.Round(lowestTemperature)}°C - " +
                     $"{Math.Round(highestTemperature)}°C");
-
-                // =================================================
                 // 3. ПРЕПОРЪКИ ЗА ОБЛЕКЛО
-                // =================================================
-
                 result.AppendLine();
                 result.AppendLine("ПРЕПОРЪКИ ЗА ОБЛЕКЛО:");
 
@@ -388,11 +376,7 @@ namespace SmartTrip.Services
                            endDate);
             }
         }
-
-        // =====================================================
         // 4. НАМИРАНЕ НА КООРДИНАТИ
-        // =====================================================
-
         private async Task<(double Latitude, double Longitude)?>
             GetCoordinatesAsync(string city)
         {
@@ -432,11 +416,7 @@ namespace SmartTrip.Services
 
             return null;
         }
-
-        // =====================================================
         // 5. ОБРАБОТКА НА КООРДИНАТИТЕ
-        // =====================================================
-
         private static (double Latitude, double Longitude)?
             ParseCoordinates(string json)
         {
@@ -469,11 +449,7 @@ namespace SmartTrip.Services
                 longitude.GetDouble()
             );
         }
-
-        // =====================================================
         // 6. СЕЗОННИ ПРЕПОРЪКИ
-        // =====================================================
-
         private static string GetSeasonalWeatherAdvice(
             string city,
             DateTime startDate,
@@ -511,11 +487,7 @@ namespace SmartTrip.Services
                 "Важно: сезонът зависи от полукълбото " +
                 "и местния климат на дестинацията.";
         }
-
-        // =====================================================
         // 7. ПОМОЩНИ МЕТОДИ
-        // =====================================================
-
         private static bool IsRainyWeather(int code)
         {
             return code is

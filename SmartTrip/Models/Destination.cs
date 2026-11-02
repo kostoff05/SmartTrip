@@ -7,14 +7,14 @@ namespace SmartTrip.Models
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; } // Име на забележителността (напр. "Колизеум")
+        public string Name { get; set; } 
 
-        public string Address { get; set; } // Адрес
+        public string Address { get; set; } 
 
-        public string ImageUrl { get; set; } // Линк към снимка
+        public string ImageUrl { get; set; } 
 
-        public double Latitude { get; set; } // Географска ширина за картата
-        public double Longitude { get; set; } // Географска дължина за картата
+        public double Latitude { get; set; } 
+        public double Longitude { get; set; } 
 
         // Връзка с пътуването
         public int TripId { get; set; }

@@ -18,23 +18,12 @@ namespace SmartTrip.Models
         public string? Interests { get; set; }
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
-
-        // Начална и крайна дата на пътуването
         public DateTime? StartDate { get; set; }
 
         public DateTime? EndDate { get; set; }
-
-        // Брой пътуващи
         public int Travelers { get; set; } = 2;
-
-        // Информация за текущото време
         public string? WeatherInfo { get; set; }
-
-        // Прогноза за периода на пътуването
         public string? TripWeatherInfo { get; set; }
-
-        // Персонализиран AI пътеводител,
-        // включително маршрути по дни и часове
         public string? AiRecommendation { get; set; }
 
         public string? TravelTypes { get; set; }

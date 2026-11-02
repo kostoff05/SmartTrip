@@ -27,11 +27,7 @@ namespace SmartTrip.Controllers
     
             _currencyService = currencyService;
         }
-
-        // ==========================================
         // 1. ВСИЧКИ ПЪТУВАНИЯ
-        // ==========================================
-
         public async Task<IActionResult> Index()
         {
             var trips = await _context.Trips
@@ -40,11 +36,7 @@ namespace SmartTrip.Controllers
 
             return View(trips);
         }
-
-        // ==========================================
         // 2. ДЕТАЙЛИ ЗА ПЪТУВАНЕ
-        // ==========================================
-
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -73,11 +65,7 @@ namespace SmartTrip.Controllers
 
             return View(trip);
         }
-
-        // ==========================================
         // 3. ТЕКУЩО ВРЕМЕ - ОТДЕЛНА ЗАЯВКА
-        // ==========================================
-
         [HttpGet]
         public async Task<IActionResult> CurrentWeather(int id)
         {
@@ -110,11 +98,7 @@ namespace SmartTrip.Controllers
                 });
             }
         }
-
-        // ==========================================
         // ВАЛУТА НА ДЕСТИНАЦИЯТА
-        // ==========================================
-
         [HttpGet]
         public async Task<IActionResult> DestinationCurrency(int id)
         {
@@ -146,22 +130,13 @@ namespace SmartTrip.Controllers
                 symbol = currency.Symbol
             });
         }
-        
-
-        // ==========================================
         // 5. СЪЗДАВАНЕ - GET
-        // ==========================================
-
         [HttpGet]
         public IActionResult Create()
         {
             return RedirectToAction("Index", "Home");
         }
-
-        // ==========================================
         // 6. СЪЗДАВАНЕ - POST
-        // ==========================================
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
@@ -176,22 +151,14 @@ namespace SmartTrip.Controllers
             // Проверяваме дали заявката е изпратена чрез JavaScript.
             bool isAjaxRequest =
                 Request.Headers["X-Requested-With"] == "XMLHttpRequest";
-
-            // ==========================================
             // ПРОВЕРКА НА ДЕСТИНАЦИЯТА
-            // ==========================================
-
             if (string.IsNullOrWhiteSpace(destination))
             {
                 return CreateError(
                     "Моля, въведете дестинация.",
                     isAjaxRequest);
             }
-
-            // ==========================================
             // ПРОВЕРКА НА ДАТИТЕ
-            // ==========================================
-
             if (startDate == default || endDate == default)
             {
                 return CreateError(
@@ -216,11 +183,7 @@ namespace SmartTrip.Controllers
                     "за да генерираме подробен маршрут.",
                     isAjaxRequest);
             }
-
-            // ==========================================
             // ПРОВЕРКА НА БЮДЖЕТА
-            // ==========================================
-
             if (!decimal.TryParse(
                     budget,
                     System.Globalization.NumberStyles.Number,
@@ -237,11 +200,7 @@ namespace SmartTrip.Controllers
             {
                 travelers = 1;
             }
-
-            // ==========================================
             // ОБЕДИНЯВАНЕ НА ИНТЕРЕСИТЕ
-            // ==========================================
-
             string selectedTravelTypes = travelTypes != null
                 ? string.Join(", ", travelTypes)
                 : string.Empty;
@@ -250,11 +209,7 @@ namespace SmartTrip.Controllers
                 selectedTravelTypes)
                 ? travelType ?? "Общи туристически интереси"
                 : $"{travelType}, {selectedTravelTypes}";
-
-            // ==========================================
             // 7. ПРОГНОЗА ЗА ПЪТУВАНЕТО
-            // ==========================================
-
             string tripWeatherInfo;
 
             try
@@ -270,11 +225,7 @@ namespace SmartTrip.Controllers
                 tripWeatherInfo =
                     "Няма налична прогноза за избрания период.";
             }
-
-            // ==========================================
             // 8. GEMINI AI
-            // ==========================================
-
             string aiRecommendation;
 
             try
@@ -295,11 +246,7 @@ namespace SmartTrip.Controllers
                     "<p>Не успяхме да генерираме " +
                     "персонализиран пътеводител.</p>";
             }
-
-            // ==========================================
             // 9. ЗАПИСВАНЕ В SQLITE
-            // ==========================================
-
             var trip = new Trip
             {
                 City = destination.Trim(),
@@ -328,11 +275,7 @@ namespace SmartTrip.Controllers
             _context.Trips.Add(trip);
 
             await _context.SaveChangesAsync();
-
-            // ==========================================
             // 10. ПРЕНАСОЧВАНЕ КЪМ НОВОТО ПЪТУВАНЕ
-            // ==========================================
-
             string detailsUrl = Url.Action(
                 nameof(Details),
                 "Trips",
@@ -357,11 +300,7 @@ namespace SmartTrip.Controllers
                 nameof(Details),
                 new { id = trip.Id });
         }
-
-        // ==========================================
         // 11. ОБРАБОТКА НА ГРЕШКИ ПРИ СЪЗДАВАНЕ
-        // ==========================================
-
         private IActionResult CreateError(
             string message,
             bool isAjaxRequest)
@@ -379,11 +318,7 @@ namespace SmartTrip.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-
-        // ==========================================
         // 12. ИЗТРИВАНЕ - GET
-        // ==========================================
-
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -402,11 +337,7 @@ namespace SmartTrip.Controllers
 
             return View(trip);
         }
-
-        // ==========================================
         // 13. ИЗТРИВАНЕ - POST
-        // ==========================================
-
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]  
         public async Task<IActionResult> DeleteConfirmed(int id)
